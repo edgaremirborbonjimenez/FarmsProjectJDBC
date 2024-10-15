@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<owneras>
+    
+    <owner id="2">
+        <fullName>Luis Alberto</fullName>
+        <phone>+987654321</phone>
+        <email>luis@gmail.com</email>
+    </owner>
+    <owner id="3">
+        <fullName>Carlos López</fullName>
+        <phone>+555123456</phone>
+        <email>carlos.lopez@example.com</email>
+    </owner>
+    <owner id="4">
+        <fullName>Ana Torres</fullName>
+        <phone>+444987654</phone>
+        <email>ana.torres@example.com</email>
+    </owner>
+    <owner id="5">
+        <fullName>Jorge Martínez</fullName>
+        <phone>+333678912</phone>
+        <email>jorge.martinez@example.com</email>
+    </owner>
+    <owner id="6">
+        <fullName>Juan Escutia</fullName>
+        <phone>9879879874</phone>
+        <email>juan@gmail.com</email>
+    </owner>
+</owneras>

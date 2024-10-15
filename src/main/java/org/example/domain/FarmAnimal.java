@@ -43,7 +43,8 @@ public class FarmAnimal {
     @Override
     public String toString() {
         return "FarmAnimal{" +
-                "amount=" + amount +
+                "id=" + id +
+                ", amount=" + amount +
                 ", farm_id=" + farm_id +
                 ", animal_id=" + animal_id +
                 '}';

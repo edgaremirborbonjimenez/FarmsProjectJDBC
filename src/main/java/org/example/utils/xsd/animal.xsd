@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="animals">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="animal" type="AnimalType" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="AnimalType">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string"/>
+    </xs:complexType>
+
+</xs:schema>

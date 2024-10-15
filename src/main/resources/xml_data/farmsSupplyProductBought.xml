@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><farmSupplyProductsBought>
+    
+    <farmSupplyProductBought id="2">
+        <amount>50</amount>
+        <total>200.00</total>
+        <purchaseDate>2024-10-02</purchaseDate>
+        <farmId>2</farmId>
+        <productId>3</productId>
+    </farmSupplyProductBought>
+    <farmSupplyProductBought id="3">
+        <amount>5</amount>
+        <total>50.0</total>
+        <purchaseDate>2024-10-15</purchaseDate>
+        <farmId>1</farmId>
+        <productId>1</productId>
+    </farmSupplyProductBought>
+    <farmSupplyProductBought id="4">
+        <amount>30</amount>
+        <total>900.00</total>
+        <purchaseDate>2024-10-04</purchaseDate>
+        <farmId>1</farmId>
+        <productId>4</productId>
+    </farmSupplyProductBought>
+    <farmSupplyProductBought id="5">
+        <amount>20</amount>
+        <total>1000.00</total>
+        <purchaseDate>2024-10-05</purchaseDate>
+        <farmId>4</farmId>
+        <productId>5</productId>
+    </farmSupplyProductBought>
+</farmSupplyProductsBought>

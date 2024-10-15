@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<animals>
+    
+    <animal id="2">
+        <name>Gato</name>
+    </animal>
+    <animal id="3">
+        <name>Caballo</name>
+    </animal>
+    <animal id="4">
+        <name>Vaca</name>
+    </animal>
+    <animal id="5">
+        <name>Oveja</name>
+        </animal>
+</animals>

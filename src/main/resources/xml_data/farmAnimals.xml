@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><farmAnimals>
+    
+    <farmAnimal id="2">
+        <amount>15</amount>
+        <farmId>1</farmId>
+        <animalId>2</animalId>
+    </farmAnimal>
+    <farmAnimal id="3">
+        <amount>5</amount>
+        <farmId>2</farmId>
+        <animalId>3</animalId>
+    </farmAnimal>
+    <farmAnimal id="4">
+        <amount>10</amount>
+        <farmId>3</farmId>
+        <animalId>1</animalId>
+    </farmAnimal>
+    <farmAnimal id="5">
+        <amount>25</amount>
+        <farmId>4</farmId>
+        <animalId>4</animalId>
+    </farmAnimal>
+<farmAnimal id="6"><amount>5</amount><farmId>1</farmId><animalId>1</animalId></farmAnimal></farmAnimals>

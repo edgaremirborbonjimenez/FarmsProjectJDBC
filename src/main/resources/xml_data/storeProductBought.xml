@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><storeProductsBought>
+    
+    <storeProductBought id="2">
+        <amount>30</amount>
+        <total>450.00</total>
+        <productId>2</productId>
+        <storeId>2</storeId>
+    </storeProductBought>
+    <storeProductBought id="3">
+        <amount>10</amount>
+        <total>50.0</total>
+        <productId>1</productId>
+        <storeId>1</storeId>
+    </storeProductBought>
+    <storeProductBought id="4">
+        <amount>25</amount>
+        <total>375.00</total>
+        <productId>4</productId>
+        <storeId>1</storeId>
+    </storeProductBought>
+    <storeProductBought id="5">
+        <amount>15</amount>
+        <total>300.00</total>
+        <productId>5</productId>
+        <storeId>4</storeId>
+    </storeProductBought>
+<storeProductBought id="6"><amount>10</amount><total>50.0</total><productId>1</productId><storeId>1</storeId></storeProductBought></storeProductsBought>

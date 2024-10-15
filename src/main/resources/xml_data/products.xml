@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<products>
+    
+    <product id="2">
+        <name>Queso</name>
+        <price>4.75</price>
+        <unitMeasurement>kg</unitMeasurement>
+    </product>
+    <product id="3">
+        <name>Sabritas</name>
+        <price>3.0</price>
+        <unitMeasurement>pc</unitMeasurement>
+    </product>
+    <product id="4">
+        <name>Miel</name>
+        <price>3.00</price>
+        <unitMeasurement>oz</unitMeasurement>
+    </product>
+    <product id="5">
+        <name>Manzana</name>
+        <price>0.80</price>
+        <unitMeasurement>lb</unitMeasurement>
+    </product>
+<product id="6"><name>CocaCola</name><price>5.0</price><unitMeasurement>pc</unitMeasurement></product></products>
