@@ -1,9 +1,8 @@
-package org.example.daos;
+package org.example.daos.jdbc;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.domain.Farm;
-import org.example.domain.Owner;
+import org.example.domain.Store;
 import org.example.interfaces.IConnection;
 import org.example.interfaces.IDAO;
 
@@ -14,30 +13,29 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-public class OwnersIDAO implements IDAO<Owner> {
+public class StoresIDAO implements IDAO<Store> {
     private static final Logger logger = LogManager.getLogger();
     private IConnection<Connection> poolConnection;
-    private static OwnersIDAO ownersIDAO;
-    private static final String  TABLE = "owners";
+    private static StoresIDAO storesIDAO;
+    private static final String  TABLE = "stores";
 
-    private OwnersIDAO(){}
+    private StoresIDAO(){}
 
-    public static OwnersIDAO getInstance(){
-        if(ownersIDAO == null){
-            ownersIDAO = new OwnersIDAO();
+    public static StoresIDAO getInstance(){
+        if(storesIDAO == null){
+            storesIDAO = new StoresIDAO();
         }
-        return ownersIDAO;
+        return storesIDAO;
     }
 
     @Override
-    public Owner insert(Owner data) throws Exception {
+    public Store insert(Store data) throws Exception {
         Connection connection = poolConnection.getConnectionFromPool();
-        String query = "INSERT INTO "+TABLE+" (full_name,phone,email) value (?,?,?)";
+        String query = "INSERT INTO "+TABLE+" (name,address) value (?,?)";
         ResultSet res = null;
         try(PreparedStatement statement =  connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);){
-            statement.setString(1,data.getFullName());
-            statement.setString(2,data.getPhone());
-            statement.setString(3,data.getEmail());
+            statement.setString(1,data.getName());
+            statement.setString(2,data.getAddress());
             statement.executeUpdate();
             res = statement.getGeneratedKeys();
             if(res.next()){
@@ -45,8 +43,8 @@ public class OwnersIDAO implements IDAO<Owner> {
                 data.setId(id);
                 return data;
             }
-            logger.error("Occurred an error Owner was not returned");
-            throw new Exception("Occurred an error Owner was not returned");
+            logger.error("Occurred an error Farm was not returned");
+            throw new Exception("Occurred an error Farm was not returned");
         }catch (Exception e){
             logger.error(e.getMessage());
             throw new Exception(e.getMessage());
@@ -55,46 +53,35 @@ public class OwnersIDAO implements IDAO<Owner> {
                 res.close();
             }
             poolConnection.releaseConnection(connection);
-        }
-    }
+        }    }
 
     @Override
-    public int updateById(int id, Owner data) throws Exception {
+    public int updateById(int id, Store data) throws Exception {
         Connection connection = poolConnection.getConnectionFromPool();
         String query = "UPDATE "+TABLE+" SET ";
         boolean firstParam = true;
-        if(data.getFullName() != null && !data.getFullName().isEmpty()){
-            query+= "full_name = ?";
+        if( data.getName() != null && !data.getName().isEmpty()){
+            query+= "name = ?";
             firstParam = false;
         }
-        if(data.getPhone() !=null && !data.getPhone().isEmpty()){
+        if(data.getAddress() != null && !data.getAddress().isEmpty()){
             if(!firstParam){
                 query+=",";
             }
-            query += "phone = ?";
+            query += "address = ?";
             firstParam = false;
         }
-        if(data.getEmail() != null && !data.getEmail().isEmpty()){
-            if(!firstParam){
-                query+=",";
-            }
-            query += "owner_id = ?";
-            firstParam = false;
-        }
+
         query+=" WHERE id = ?";
         try(PreparedStatement statement = connection.prepareStatement(query)){
             int paramIndex = 0;
-            if(data.getFullName() != null && !data.getFullName().isEmpty()){
+            if(data.getName() != null && !data.getName().isEmpty()){
                 paramIndex++;
-                statement.setString(paramIndex,data.getFullName());
+                statement.setString(paramIndex,data.getName());
             }
-            if(data.getPhone() != null && !data.getPhone().isEmpty()){
+            if(data.getAddress() != null && !data.getAddress().isEmpty()){
                 paramIndex++;
-                statement.setString(paramIndex,data.getPhone());
-            }
-            if(data.getEmail() != null && !data.getEmail().isEmpty()){
-                paramIndex++;
-                statement.setString(paramIndex,data.getEmail());
+                statement.setString(paramIndex,data.getAddress());
             }
             paramIndex++;
             statement.setInt(paramIndex,id);
@@ -105,7 +92,7 @@ public class OwnersIDAO implements IDAO<Owner> {
             throw new Exception(e.getMessage());
         }finally {
             poolConnection.releaseConnection(connection);
-        }     }
+        }    }
 
     @Override
     public int deleteById(Integer id) throws Exception {
@@ -126,30 +113,27 @@ public class OwnersIDAO implements IDAO<Owner> {
             throw new Exception(e.getMessage());
         }finally {
             poolConnection.releaseConnection(connection);
-        }
-    }
+        }    }
 
     @Override
-    public List<Owner> findAll() throws Exception {
+    public List<Store> findAll() throws Exception {
         Connection connection = poolConnection.getConnectionFromPool();
         String query = "SELECT * FROM "+TABLE;
         ResultSet res = null;
-        List<Owner> ownerList = new LinkedList<>();
+        List<Store> storeList = new LinkedList<>();
         try(PreparedStatement statement = connection.prepareStatement(query)){
             res = statement.executeQuery();
             while (res.next()){
                 int id = res.getInt("id");
-                String fullName = res.getString("full_name");
-                String phone = res.getString("phone");
-                String email = res.getString("email");
-                Owner owner = new Owner();
-                owner.setId(id);
-                owner.setFullName(fullName);
-                owner.setPhone(phone);
-                owner.setEmail(email);
-                ownerList.add(owner);
+                String name = res.getString("name");
+                String address = res.getString("address");
+                Store store = new Store();
+                store.setId(id);
+                store.setName(name);
+                store.setAddress(address);
+                storeList.add(store);
             }
-            return ownerList;
+            return storeList;
         }catch (Exception e){
             logger.error(e.getMessage());
             throw new Exception(e.getMessage());
@@ -158,11 +142,10 @@ public class OwnersIDAO implements IDAO<Owner> {
                 res.close();
             }
             poolConnection.releaseConnection(connection);
-        }
-    }
+        }    }
 
     @Override
-    public Owner findById(int id) throws Exception {
+    public Store findById(int id) throws Exception {
         if(id <=0 ){
             logger.warn("id: "+id+" not valid");
             return null;
@@ -174,18 +157,16 @@ public class OwnersIDAO implements IDAO<Owner> {
             statement.setInt(1,id);
             res = statement.executeQuery();
             while (res.next()){
-                String fullName = res.getString("full_name");
-                String phone = res.getString("phone");
-                String email = res.getString("email");
-                Owner owner = new Owner();
-                owner.setId(id);
-                owner.setFullName(fullName);
-                owner.setPhone(phone);
-                owner.setEmail(email);
-                return owner;
+                String name = res.getString("name");
+                String address = res.getString("address");
+                Store store = new Store();
+                store.setId(id);
+                store.setName(name);
+                store.setAddress(address);
+                return store;
             }
-            logger.error("An error occurred, Owner was not retrieved");
-            throw new Exception("An error occurred, Owner was not retrieved");
+            logger.error("An error occurred, Farm was not retrieved");
+            throw new Exception("An error occurred, Farm was not retrieved");
         }catch (Exception e){
             logger.error(e.getMessage());
             throw new Exception(e.getMessage());
@@ -200,6 +181,5 @@ public class OwnersIDAO implements IDAO<Owner> {
     public void setPoolConnection(IConnection<Connection> poolConnection) {
         this.poolConnection = poolConnection;
     }
-
 
 }

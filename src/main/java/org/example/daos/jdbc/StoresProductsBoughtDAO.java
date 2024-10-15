@@ -1,8 +1,7 @@
-package org.example.daos;
+package org.example.daos.jdbc;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.domain.FarmSupplyProductBought;
 import org.example.domain.StoreProductBought;
 import org.example.interfaces.IConnection;
 import org.example.interfaces.IDAO;

@@ -1,9 +1,8 @@
-package org.example.daos;
+package org.example.daos.jdbc;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.domain.Farm;
-import org.example.domain.FarmAnimal;
+import org.example.domain.Owner;
 import org.example.interfaces.IConnection;
 import org.example.interfaces.IDAO;
 
@@ -14,29 +13,30 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-public class FarmsAnimalsIDAO implements IDAO<FarmAnimal> {
+public class OwnersIDAO implements IDAO<Owner> {
     private static final Logger logger = LogManager.getLogger();
     private IConnection<Connection> poolConnection;
-    private static FarmsAnimalsIDAO farmsAnimalsIDAO;
-    private static final String  TABLE = "farms_animals";
+    private static OwnersIDAO ownersIDAO;
+    private static final String  TABLE = "owners";
 
-    private FarmsAnimalsIDAO(){}
+    private OwnersIDAO(){}
 
-    public static FarmsAnimalsIDAO getInstance(){
-        if(farmsAnimalsIDAO == null){
-            farmsAnimalsIDAO = new FarmsAnimalsIDAO();
+    public static OwnersIDAO getInstance(){
+        if(ownersIDAO == null){
+            ownersIDAO = new OwnersIDAO();
         }
-        return farmsAnimalsIDAO;
+        return ownersIDAO;
     }
+
     @Override
-    public FarmAnimal insert(FarmAnimal data)throws Exception {
+    public Owner insert(Owner data) throws Exception {
         Connection connection = poolConnection.getConnectionFromPool();
-        String query = "INSERT INTO "+TABLE+" (amount,farm_id,animal_id) value (?,?,?)";
+        String query = "INSERT INTO "+TABLE+" (full_name,phone,email) value (?,?,?)";
         ResultSet res = null;
         try(PreparedStatement statement =  connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);){
-            statement.setInt(1,data.getAmount());
-            statement.setInt(2,data.getFarm_id());
-            statement.setInt(3,data.getAnimal_id());
+            statement.setString(1,data.getFullName());
+            statement.setString(2,data.getPhone());
+            statement.setString(3,data.getEmail());
             statement.executeUpdate();
             res = statement.getGeneratedKeys();
             if(res.next()){
@@ -44,8 +44,8 @@ public class FarmsAnimalsIDAO implements IDAO<FarmAnimal> {
                 data.setId(id);
                 return data;
             }
-            logger.error("Occurred an error FarmAnimal was not returned");
-            throw new Exception("Occurred an error FarmAnimal was not returned");
+            logger.error("Occurred an error Owner was not returned");
+            throw new Exception("Occurred an error Owner was not returned");
         }catch (Exception e){
             logger.error(e.getMessage());
             throw new Exception(e.getMessage());
@@ -58,46 +58,42 @@ public class FarmsAnimalsIDAO implements IDAO<FarmAnimal> {
     }
 
     @Override
-    public int updateById(int id, FarmAnimal data) throws Exception {
+    public int updateById(int id, Owner data) throws Exception {
         Connection connection = poolConnection.getConnectionFromPool();
         String query = "UPDATE "+TABLE+" SET ";
         boolean firstParam = true;
-
-        if(data.getAmount() != null){
-            if(!firstParam){
-                query+=",";
-            }
-            query += "amount = ?";
+        if(data.getFullName() != null && !data.getFullName().isEmpty()){
+            query+= "full_name = ?";
             firstParam = false;
         }
-        if(data.getFarm_id() != null && data.getFarm_id() > 0){
+        if(data.getPhone() !=null && !data.getPhone().isEmpty()){
             if(!firstParam){
                 query+=",";
             }
-            query += "farm_id = ?";
+            query += "phone = ?";
             firstParam = false;
         }
-        if(data.getAnimal_id() != null && data.getAnimal_id() > 0){
+        if(data.getEmail() != null && !data.getEmail().isEmpty()){
             if(!firstParam){
                 query+=",";
             }
-            query += "animal_id = ?";
+            query += "owner_id = ?";
             firstParam = false;
         }
         query+=" WHERE id = ?";
         try(PreparedStatement statement = connection.prepareStatement(query)){
             int paramIndex = 0;
-            if(data.getAmount() != null){
+            if(data.getFullName() != null && !data.getFullName().isEmpty()){
                 paramIndex++;
-                statement.setInt(paramIndex,data.getAmount());
+                statement.setString(paramIndex,data.getFullName());
             }
-            if(data.getFarm_id() != null && data.getFarm_id() > 0){
+            if(data.getPhone() != null && !data.getPhone().isEmpty()){
                 paramIndex++;
-                statement.setInt(paramIndex,data.getFarm_id());
+                statement.setString(paramIndex,data.getPhone());
             }
-            if(data.getAnimal_id() != null && data.getAnimal_id() > 0){
+            if(data.getEmail() != null && !data.getEmail().isEmpty()){
                 paramIndex++;
-                statement.setInt(paramIndex,data.getAnimal_id());
+                statement.setString(paramIndex,data.getEmail());
             }
             paramIndex++;
             statement.setInt(paramIndex,id);
@@ -108,8 +104,7 @@ public class FarmsAnimalsIDAO implements IDAO<FarmAnimal> {
             throw new Exception(e.getMessage());
         }finally {
             poolConnection.releaseConnection(connection);
-        }
-    }
+        }     }
 
     @Override
     public int deleteById(Integer id) throws Exception {
@@ -134,26 +129,26 @@ public class FarmsAnimalsIDAO implements IDAO<FarmAnimal> {
     }
 
     @Override
-    public List<FarmAnimal> findAll() throws Exception {
+    public List<Owner> findAll() throws Exception {
         Connection connection = poolConnection.getConnectionFromPool();
         String query = "SELECT * FROM "+TABLE;
         ResultSet res = null;
-        List<FarmAnimal> farmAnimalList = new LinkedList<>();
+        List<Owner> ownerList = new LinkedList<>();
         try(PreparedStatement statement = connection.prepareStatement(query)){
             res = statement.executeQuery();
             while (res.next()){
                 int id = res.getInt("id");
-                int amount = res.getInt("amount");
-                int farmId = res.getInt("farm_id");
-                int animalId = res.getInt("animal_id");
-                FarmAnimal farmAnimal = new FarmAnimal();
-                farmAnimal.setId(id);
-                farmAnimal.setAmount(amount);
-                farmAnimal.setFarm_id(farmId);
-                farmAnimal.setAnimal_id(animalId);
-                farmAnimalList.add(farmAnimal);
+                String fullName = res.getString("full_name");
+                String phone = res.getString("phone");
+                String email = res.getString("email");
+                Owner owner = new Owner();
+                owner.setId(id);
+                owner.setFullName(fullName);
+                owner.setPhone(phone);
+                owner.setEmail(email);
+                ownerList.add(owner);
             }
-            return farmAnimalList;
+            return ownerList;
         }catch (Exception e){
             logger.error(e.getMessage());
             throw new Exception(e.getMessage());
@@ -166,7 +161,7 @@ public class FarmsAnimalsIDAO implements IDAO<FarmAnimal> {
     }
 
     @Override
-    public FarmAnimal findById(int id) throws Exception {
+    public Owner findById(int id) throws Exception {
         if(id <=0 ){
             logger.warn("id: "+id+" not valid");
             return null;
@@ -178,18 +173,18 @@ public class FarmsAnimalsIDAO implements IDAO<FarmAnimal> {
             statement.setInt(1,id);
             res = statement.executeQuery();
             while (res.next()){
-                int amount = res.getInt("amount");
-                int farmId = res.getInt("farm_id");
-                int animalId = res.getInt("animal_id");
-                FarmAnimal farmAnimal = new FarmAnimal();
-                farmAnimal.setId(id);
-                farmAnimal.setAmount(amount);
-                farmAnimal.setFarm_id(farmId);
-                farmAnimal.setAnimal_id(animalId);
-                return farmAnimal;
+                String fullName = res.getString("full_name");
+                String phone = res.getString("phone");
+                String email = res.getString("email");
+                Owner owner = new Owner();
+                owner.setId(id);
+                owner.setFullName(fullName);
+                owner.setPhone(phone);
+                owner.setEmail(email);
+                return owner;
             }
-            logger.error("An error occurred, FarmAnimal was not retrieved");
-            throw new Exception("An error occurred, FarmAnimal was not retrieved");
+            logger.error("An error occurred, Owner was not retrieved");
+            throw new Exception("An error occurred, Owner was not retrieved");
         }catch (Exception e){
             logger.error(e.getMessage());
             throw new Exception(e.getMessage());
@@ -198,8 +193,7 @@ public class FarmsAnimalsIDAO implements IDAO<FarmAnimal> {
                 res.close();
             }
             poolConnection.releaseConnection(connection);
-        }
-    }
+        }    }
 
     @Override
     public void setPoolConnection(IConnection<Connection> poolConnection) {

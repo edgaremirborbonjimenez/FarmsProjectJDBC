@@ -2,14 +2,11 @@ package org.example;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.daos.*;
-import org.example.domain.*;
+import org.example.daos.jdbc.*;
 import org.example.interfaces.IConnection;
 import org.example.utils.connection.HikariCPImplementation;
-import org.example.utils.enums.UnitMeasurement;
 
 import java.sql.Connection;
-import java.sql.Date;
 
 
 public class Main {
