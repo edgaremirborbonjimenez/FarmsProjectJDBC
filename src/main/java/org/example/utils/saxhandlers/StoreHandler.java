@@ -68,7 +68,7 @@ public class StoreHandler extends DefaultHandler {
 
     @Override
     public void endDocument() throws SAXException {
-        latestIndex = storeList.size()+1;
+        latestIndex = storeList.getLast().getId()+1;
     }
 
     @Override

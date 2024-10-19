@@ -56,7 +56,10 @@ public class ProductsXML implements IDAO<Product> {
         Document doc = builder.parse(xmlFile);
 
         Element newProduct = doc.createElement("product");
-        int newId = handler.getLatestIndex();
+//        int newId = handler.getLatestIndex();
+        NodeList nodeList = doc.getElementsByTagName("product");
+        Element lastNode = (Element) nodeList.item(nodeList.getLength()-1);
+        int newId = Integer.parseInt(lastNode.getAttribute("id"))+1;
         newProduct.setAttribute("id",Integer.toString(newId));
 
         Element name = doc.createElement("name");

@@ -1,10 +1,14 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<owneras>
-    
+<?xml version="1.0" encoding="UTF-8"?>
+<owners>
+    <owner id="1">
+        <fullName>Juan Pérez</fullName>
+        <phone>+123456789</phone>
+        <email>juan.perez@example.com</email>
+    </owner>
     <owner id="2">
-        <fullName>Luis Alberto</fullName>
+        <fullName>Maria García</fullName>
         <phone>+987654321</phone>
-        <email>luis@gmail.com</email>
+        <email>maria.garcia@example.com</email>
     </owner>
     <owner id="3">
         <fullName>Carlos López</fullName>
@@ -21,9 +25,4 @@
         <phone>+333678912</phone>
         <email>jorge.martinez@example.com</email>
     </owner>
-    <owner id="6">
-        <fullName>Juan Escutia</fullName>
-        <phone>9879879874</phone>
-        <email>juan@gmail.com</email>
-    </owner>
-</owneras>
+</owners>

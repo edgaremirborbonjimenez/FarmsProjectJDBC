@@ -1,24 +1,28 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <products>
-    
+    <product id="1">
+        <name>Leche</name>
+        <price>1.50</price>
+        <unitMeasurement>Litro</unitMeasurement>
+    </product>
     <product id="2">
         <name>Queso</name>
         <price>4.75</price>
-        <unitMeasurement>kg</unitMeasurement>
+        <unitMeasurement>Kilogramo</unitMeasurement>
     </product>
     <product id="3">
-        <name>Sabritas</name>
-        <price>3.0</price>
-        <unitMeasurement>pc</unitMeasurement>
+        <name>Huevo</name>
+        <price>0.20</price>
+        <unitMeasurement>Unidad</unitMeasurement>
     </product>
     <product id="4">
         <name>Miel</name>
         <price>3.00</price>
-        <unitMeasurement>oz</unitMeasurement>
+        <unitMeasurement>Frasco</unitMeasurement>
     </product>
     <product id="5">
         <name>Manzana</name>
         <price>0.80</price>
-        <unitMeasurement>lb</unitMeasurement>
+        <unitMeasurement>Kilogramo</unitMeasurement>
     </product>
-<product id="6"><name>CocaCola</name><price>5.0</price><unitMeasurement>pc</unitMeasurement></product></products>
+</products>

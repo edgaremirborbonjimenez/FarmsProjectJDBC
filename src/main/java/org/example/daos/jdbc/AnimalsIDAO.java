@@ -63,6 +63,7 @@ public class AnimalsIDAO implements IDAO<Animal> {
         try(PreparedStatement statement = connection.prepareStatement(query)){
             int paramIndex = 0;
             if( data.getName() != null && !data.getName().isEmpty()){
+                paramIndex++;
                 statement.setString(paramIndex,data.getName());
             }
             paramIndex++;

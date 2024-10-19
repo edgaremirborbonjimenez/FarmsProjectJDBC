@@ -55,7 +55,10 @@ public class FarmsXML implements IDAO<Farm> {
         Document doc = builder.parse(xmlFile);
 
         Element newFarm = doc.createElement("farm");
-        int newId = handler.getLatestIndex();
+//        int newId = handler.getLatestIndex();
+        NodeList nodeList = doc.getElementsByTagName("farm");
+        Element lastNode = (Element) nodeList.item(nodeList.getLength()-1);
+        int newId = Integer.parseInt(lastNode.getAttribute("id"))+1;
         newFarm.setAttribute("id",Integer.toString(newId));
 
         Element name = doc.createElement("name");

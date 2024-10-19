@@ -56,7 +56,10 @@ public class OwnerXML implements IDAO<Owner> {
         Document doc = builder.parse(xmlFile);
 
         Element newOwner = doc.createElement("owner");
-        int newId = handler.getLatestIndex();
+//        int newId = handler.getLatestIndex();
+        NodeList nodeList = doc.getElementsByTagName("owner");
+        Element lastNode = (Element) nodeList.item(nodeList.getLength()-1);
+        int newId = Integer.parseInt(lastNode.getAttribute("id"))+1;
         newOwner.setAttribute("id",Integer.toString(newId));
 
         Element fullName = doc.createElement("fullName");

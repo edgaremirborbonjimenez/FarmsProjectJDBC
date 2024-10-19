@@ -56,14 +56,16 @@ public class AnimalsXML implements IDAO<Animal> {
         Document doc = builder.parse(xmlFile);
 
         Element newAnimal = doc.createElement("animal");
-        int newId = handler.getLatestIndex();
+//        int newId = handler.getLatestIndex();
+        NodeList nodeList = doc.getElementsByTagName("animal");
+        Element lastNode = (Element) nodeList.item(nodeList.getLength()-1);
+        int newId = Integer.parseInt(lastNode.getAttribute("id"))+1;
         newAnimal.setAttribute("id",Integer.toString(newId));
 
         Element name = doc.createElement("name");
         name.appendChild(doc.createTextNode(data.getName()));
 
         newAnimal.appendChild(name);
-
         doc.getDocumentElement().appendChild(newAnimal);
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();

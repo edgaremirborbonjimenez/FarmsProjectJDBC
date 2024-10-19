@@ -83,7 +83,7 @@ public class StoreProductBoughtHandler extends DefaultHandler {
 
     @Override
     public void endDocument() throws SAXException {
-        latestIndex = storeProductBoughtList.size()+1;
+        latestIndex = storeProductBoughtList.getLast().getId()+1;
     }
 
     @Override

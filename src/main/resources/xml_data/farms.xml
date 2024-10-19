@@ -1,15 +1,19 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <farms>
-    
+    <farm id="1">
+        <name>Granja Los Pinos</name>
+        <address>Calle 123, Zona Rural</address>
+        <ownerId>1</ownerId>
+    </farm>
     <farm id="2">
         <name>Finca El Roble</name>
         <address>Carretera 456, Sector Sur</address>
         <ownerId>2</ownerId>
     </farm>
     <farm id="3">
-        <name>Granjona</name>
-        <address>Valley Lake</address>
-        <ownerId>1</ownerId>
+        <name>Hacienda Las Flores</name>
+        <address>Avenida Principal 789, Colonia Norte</address>
+        <ownerId>3</ownerId>
     </farm>
     <farm id="4">
         <name>Estancia La Esperanza</name>
@@ -21,4 +25,4 @@
         <address>Callejón Sin Nombre, Pueblo Viejo</address>
         <ownerId>5</ownerId>
     </farm>
-<farm id="6"><name>Juans Farm</name><address>Street 3</address><ownerId>1</ownerId></farm></farms>
+</farms>

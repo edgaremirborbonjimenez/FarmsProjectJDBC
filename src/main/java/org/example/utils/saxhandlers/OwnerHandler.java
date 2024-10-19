@@ -74,7 +74,7 @@ public class OwnerHandler extends DefaultHandler {
 
     @Override
     public void endDocument() throws SAXException {
-        latestIndex = ownerList.size()+1;
+        latestIndex = ownerList.getLast().getId()+1;
     }
 
     @Override

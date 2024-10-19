@@ -6,14 +6,18 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.exceptions.ConnectionException;
 import org.example.interfaces.IConnection;
+
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class HikariCPImplementation implements IConnection<Connection> {
     private static final Logger logger = LogManager.getLogger();
     private int poolSize;
     private static HikariCPImplementation hikariImp;
     private static HikariDataSource dataSource;
+
 
     private HikariCPImplementation(){}
 
@@ -26,13 +30,19 @@ public class HikariCPImplementation implements IConnection<Connection> {
 
     @Override
     public void startPool(){
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://localhost/farms");
-        config.setUsername("root");
-        config.setPassword("bone770115");
-        config.setMaximumPoolSize(this.poolSize);
-        dataSource = new HikariDataSource(config);
-        logger.info("Pool Connection Created");
+        Properties properties = new Properties();
+        try (FileReader input = new FileReader("src/main/resources/env.properties")){
+            properties.load(input);
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(properties.getProperty("db.url"));
+            config.setUsername(properties.getProperty("db.username"));
+            config.setPassword(properties.getProperty("db.password"));
+            config.setMaximumPoolSize(this.poolSize);
+            dataSource = new HikariDataSource(config);
+            logger.info("Pool Connection Created");
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
     }
 
     public void setPoolSize(int size){

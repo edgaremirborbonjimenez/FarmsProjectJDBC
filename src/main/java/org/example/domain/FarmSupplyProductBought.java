@@ -1,13 +1,21 @@
 package org.example.domain;
 
+import jakarta.xml.bind.annotation.*;
+
 import java.sql.Date;
 
+@XmlRootElement(name="farmSupplyProductBought")
+@XmlType(propOrder = {"id","amount","total","purchaseDate","farmId","productId"})
+@XmlAccessorType(XmlAccessType.FIELD)
 public class FarmSupplyProductBought {
+    @XmlAttribute
     Integer id;
     Integer amount;
     Double total;
     Date purchaseDate;
+    @XmlElement(name = "farmId")
     Integer farm_id;
+    @XmlElement(name = "productId")
     Integer product_id;
 
     public Integer getId() {

@@ -1,13 +1,16 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <stores>
-    
+    <store id="1">
+        <name>Supermercado Central</name>
+        <address>Avenida Principal 100</address>
+    </store>
     <store id="2">
         <name>Mercado Los Olivos</name>
         <address>Calle 45, Barrio Norte</address>
     </store>
     <store id="3">
-        <name>OXXO</name>
-        <address>Street 3</address>
+        <name>Tienda La Esquina</name>
+        <address>Esquina de la Plaza, Centro</address>
     </store>
     <store id="4">
         <name>Comercial El Buen Precio</name>
@@ -17,4 +20,4 @@
         <name>Almacén La Fortuna</name>
         <address>Paseo de las Flores, Sector Este</address>
     </store>
-<store id="6"><name>Abarrotes Choco</name><address>Street 2</address></store></stores>
+</stores>

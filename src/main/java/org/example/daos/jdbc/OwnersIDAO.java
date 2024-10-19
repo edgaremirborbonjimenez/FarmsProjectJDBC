@@ -77,7 +77,7 @@ public class OwnersIDAO implements IDAO<Owner> {
             if(!firstParam){
                 query+=",";
             }
-            query += "owner_id = ?";
+            query += "email = ?";
             firstParam = false;
         }
         query+=" WHERE id = ?";

@@ -174,10 +174,12 @@ public class ProductsIDAO implements IDAO<Product> {
             while (res.next()){
                 String name = res.getString("name");
                 double price = res.getInt("price");
+                String unit = res.getString("unit_measurement");
                 Product product = new Product();
                 product.setId(id);
                 product.setName(name);
                 product.setPrice(price);
+                product.setUnitMeasurement(unit);
                 return product;
             }
             logger.error("An error occurred, Products was not retrieved");

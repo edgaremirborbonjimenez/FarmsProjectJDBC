@@ -62,7 +62,7 @@ public class AnimalsHandler extends DefaultHandler {
 
     @Override
     public void endDocument() throws SAXException {
-        latestIndex = animalList.size()+1;
+        latestIndex = animalList.getLast().getId()+1;
     }
 
     @Override

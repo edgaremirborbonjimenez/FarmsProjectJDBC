@@ -1,6 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<animals>
-    
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><animals>
+    <animal id="1">
+        <name>Perro</name>
+    </animal>
     <animal id="2">
         <name>Gato</name>
     </animal>
@@ -12,5 +13,5 @@
     </animal>
     <animal id="5">
         <name>Oveja</name>
-        </animal>
+    </animal>
 </animals>

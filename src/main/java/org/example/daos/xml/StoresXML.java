@@ -54,7 +54,10 @@ public class StoresXML implements IDAO<Store> {
         Document doc = builder.parse(xmlFile);
 
         Element newStore = doc.createElement("store");
-        int newId = handler.getLatestIndex();
+//        int newId = handler.getLatestIndex();
+        NodeList nodeList = doc.getElementsByTagName("store");
+        Element lastNode = (Element) nodeList.item(nodeList.getLength()-1);
+        int newId = Integer.parseInt(lastNode.getAttribute("id"))+1;
         newStore.setAttribute("id",Integer.toString(newId));
 
         Element name = doc.createElement("name");

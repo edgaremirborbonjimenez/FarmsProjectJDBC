@@ -2,12 +2,20 @@ package org.example;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.daos.jaxb.AnimalJAXB;
+import org.example.daos.jaxb.FarmJAXB;
 import org.example.daos.jdbc.*;
 import org.example.daos.xml.*;
 import org.example.domain.*;
+import org.example.domain.jaxb.Animals;
+import org.example.domain.jaxb.Farms;
 import org.example.interfaces.IConnection;
+import org.example.interfaces.IDAO;
+import org.example.interfaces.IMarsheller;
 import org.example.utils.connection.HikariCPImplementation;
 import org.example.utils.enums.UnitMeasurement;
+import org.example.utils.marshallers.AnimalMarshaller;
+import org.example.utils.marshallers.GenericMarshaller;
 import org.example.utils.saxhandlers.*;
 
 import javax.xml.XMLConstants;
@@ -16,8 +24,10 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.File;
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.Date;
+import java.util.Properties;
 
 
 public class Main {
@@ -165,7 +175,7 @@ public class Main {
 //        storesProductsBoughtDAO.findAll().forEach(System.out::println);
 //        System.out.println(storesProductsBoughtDAO.findById(created.getId()));
 
-        AnimalsXML animalsXML = new AnimalsXML("src/main/resources/xml_data/animals.xml",new AnimalsHandler());
+        AnimalsXML animalsXML = new AnimalsXML("src/main/resources/xml_data/animals.xml", new AnimalsHandler());
 //        animalsXML.findAll().forEach(System.out::println);
 //        System.out.println();
 //        System.out.println(animalsXML.findById(1));
@@ -191,7 +201,7 @@ public class Main {
 //        System.out.println("El archivo es valido");
 
 
-        OwnerXML ownerXML = new OwnerXML("src/main/resources/xml_data/owners.xml",new OwnerHandler());
+        OwnerXML ownerXML = new OwnerXML("src/main/resources/xml_data/owners.xml", new OwnerHandler());
 //        ownerXML.findAll().forEach(System.out::println);
 //        System.out.println();
 //        System.out.println(ownerXML.findById(1));
@@ -212,7 +222,7 @@ public class Main {
 //        owner1.setEmail("luis@gmail.com");
 //        System.out.println(ownerXML.updateById(2,owner1));
 
-        FarmsXML farmsXML = new FarmsXML("src/main/resources/xml_data/farms.xml",new FarmHandler());
+        FarmsXML farmsXML = new FarmsXML("src/main/resources/xml_data/farms.xml", new FarmHandler());
 //        farmsXML.findAll().forEach(System.out::println);
 //        System.out.println();
 //        System.out.println(farmsXML.findById(1));
@@ -234,7 +244,7 @@ public class Main {
 //        farm1.setOwner_id(1);
 //        System.out.println(farmsXML.updateById(3,farm1));
 
-        ProductsXML productsXML = new ProductsXML("src/main/resources/xml_data/products.xml",new ProducHandler());
+        ProductsXML productsXML = new ProductsXML("src/main/resources/xml_data/products.xml", new ProducHandler());
 //        productsXML.findAll().forEach(System.out::println);
 //        System.out.println();
 //        System.out.println(productsXML.findById(1));
@@ -256,8 +266,8 @@ public class Main {
 //        product1.setUnitMeasurement(UnitMeasurement.pc.unit);
 //        System.out.println(productsXML.updateById(3,product1));
 
-        StoresXML storesXML = new StoresXML("src/main/resources/xml_data/stores.xml",new StoreHandler());
-        storesXML.findAll().forEach(System.out::println);
+        StoresXML storesXML = new StoresXML("src/main/resources/xml_data/stores.xml", new StoreHandler());
+//        storesXML.findAll().forEach(System.out::println);
 //        System.out.println();
 //        System.out.println(storesXML.findById(1));
 //        System.out.println();
@@ -276,7 +286,7 @@ public class Main {
 //        store1.setAddress("Street 3");
 //        System.out.println(storesXML.updateById(3,store1));
 
-//        FarmsAnimalsXML farmsAnimalsXML = new FarmsAnimalsXML("src/main/resources/xml_data/farmAnimals.xml",new FarmsAnimalsHandler());
+        FarmsAnimalsXML farmsAnimalsXML = new FarmsAnimalsXML("src/main/resources/xml_data/farmAnimals.xml", new FarmsAnimalsHandler());
 //        farmsAnimalsXML.findAll().forEach(System.out::println);
 //        System.out.println();
 //        System.out.println(farmsAnimalsXML.findById(1));
@@ -298,7 +308,7 @@ public class Main {
 //        farmAnimal1.setAnimal_id(2);
 //        System.out.println(farmsAnimalsXML.updateById(3,farmAnimal1));
 
-        FarmsSupplyProductsBoughtXML farmsSupplyProductsBoughtXML = new FarmsSupplyProductsBoughtXML("src/main/resources/xml_data/farmsSupplyProductBought.xml",new FarmsSupplyProductBoughtHandler());
+        FarmsSupplyProductsBoughtXML farmsSupplyProductsBoughtXML = new FarmsSupplyProductsBoughtXML("src/main/resources/xml_data/farmsSupplyProductBought.xml", new FarmsSupplyProductBoughtHandler());
 //        farmsSupplyProductsBoughtXML.findAll().forEach(System.out::println);
 //        System.out.println();
 //        System.out.println(farmsSupplyProductsBoughtXML.findById(1));
@@ -324,7 +334,7 @@ public class Main {
 //        farmSupplyProductBought1.setProduct_id(1);
 //        System.out.println(farmsSupplyProductsBoughtXML.updateById(3,farmSupplyProductBought1));
 
-          FarmsSupplyProductsInventoryXML farmsSupplyProductsInventoryXML = new FarmsSupplyProductsInventoryXML("src/main/resources/xml_data/farmSupplyProductInventory.xml",new FarmSupplyProductInventoryHandler());
+        FarmsSupplyProductsInventoryXML farmsSupplyProductsInventoryXML = new FarmsSupplyProductsInventoryXML("src/main/resources/xml_data/farmSupplyProductInventory.xml", new FarmSupplyProductInventoryHandler());
 //        farmsSupplyProductsInventoryXML.findAll().forEach(System.out::println);
 //        System.out.println();
 //        System.out.println(farmsSupplyProductsInventoryXML.findById(1));
@@ -346,7 +356,7 @@ public class Main {
 //        f1.setProduct_id(1);
 //        System.out.println(farmsSupplyProductsInventoryXML.updateById(3,f1));
 
-        StoresProductsBoughtXML storesProductsBoughtXML = new StoresProductsBoughtXML("src/main/resources/xml_data/storeProductBought.xml",new StoreProductBoughtHandler());
+        StoresProductsBoughtXML storesProductsBoughtXML = new StoresProductsBoughtXML("src/main/resources/xml_data/storeProductBought.xml", new StoreProductBoughtHandler());
 //        storesProductsBoughtXML.findAll().forEach(System.out::println);
 //        System.out.println();
 //        System.out.println(storesProductsBoughtXML.findById(1));
@@ -370,5 +380,55 @@ public class Main {
 //        s1.setStore_id(1);
 //        System.out.println(storesProductsBoughtXML.updateById(3,s1));
 
+        Properties properties = new Properties();
+        FileReader input = new FileReader("src/main/resources/env.properties");
+        properties.load(input);
+        IMarsheller<Animals> animalsIMarsheller = new GenericMarshaller<>(properties.getProperty("xml.jaxb.animal"), Animals.class);
+        IDAO<Animal> animalIDAO = new AnimalJAXB(animalsIMarsheller);
+        Animal animal = new Animal();
+        animal.setName("Bull");
+        animal = animalIDAO.insert(animal);
+
+        animalIDAO.findAll().forEach(System.out::println);
+
+//        Animal animalUpdated = new Animal();
+//        animalUpdated.setName("Horse");
+//        animalIDAO.updateById(1,animalUpdated);
+//
+//        System.out.println(animalIDAO.findById(1));
+//
+//        animalIDAO.deleteById(1);
+//        System.out.println(animalIDAO.findById(1));
+
+//        IMarsheller<Farms> farmsIMarsheller = new GenericMarshaller<>(properties.getProperty("xml.jaxb.farm"), Farms.class);
+//        IDAO<Farm> farmIDAO = new FarmJAXB(farmsIMarsheller);
+//        Farm farm = new Farm();
+//        farm.setName("JoyFarm");
+//        farm.setAddress("Town 2");
+//        farm.setOwner_id(1);
+//        farmIDAO.insert(farm);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
+
 }

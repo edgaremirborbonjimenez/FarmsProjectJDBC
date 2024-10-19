@@ -74,7 +74,7 @@ public class ProducHandler extends DefaultHandler {
 
     @Override
     public void endDocument() throws SAXException {
-        latestIndex = productList.size()+1;
+        latestIndex = productList.getLast().getId()+1;
     }
 
     @Override

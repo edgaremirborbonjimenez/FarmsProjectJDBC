@@ -1,40 +1,41 @@
 package org.example.services;
 
+import org.example.domain.Farm;
 import org.example.interfaces.IDAO;
 import org.example.interfaces.IService;
 
 import java.util.List;
 
-public class FarmService implements IService<FarmService> {
+public class FarmService implements IService<Farm> {
 
-    IDAO<FarmService> farmServiceIDAO;
+    IDAO<Farm> farmIDAO;
 
-    public FarmService(IDAO<FarmService> farmServiceIDAO){
-        this.farmServiceIDAO = farmServiceIDAO;
+    public FarmService(IDAO<Farm> farmIDAO){
+        this.farmIDAO = farmIDAO;
     }
 
     @Override
-    public FarmService insert(FarmService data) throws Exception {
-        return farmServiceIDAO.insert(data);
+    public Farm insert(Farm data) throws Exception {
+        return farmIDAO.insert(data);
     }
 
     @Override
-    public int updateById(int id, FarmService data) throws Exception {
-        return farmServiceIDAO.updateById(id,data);
+    public int updateById(int id, Farm data) throws Exception {
+        return farmIDAO.updateById(id,data);
     }
 
     @Override
     public int deleteById(Integer id) throws Exception {
-        return farmServiceIDAO.deleteById(id);
+        return farmIDAO.deleteById(id);
     }
 
     @Override
-    public List<FarmService> findAll() throws Exception {
-        return farmServiceIDAO.findAll();
+    public List<Farm> findAll() throws Exception {
+        return farmIDAO.findAll();
     }
 
     @Override
-    public FarmService findById(int id) throws Exception {
-        return farmServiceIDAO.findById(id);
+    public Farm findById(int id) throws Exception {
+        return farmIDAO.findById(id);
     }
 }

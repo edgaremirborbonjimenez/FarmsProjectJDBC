@@ -51,7 +51,10 @@ public class FarmsSupplyProductsBoughtXML implements IDAO<FarmSupplyProductBough
         Document doc = builder.parse(xmlFile);
 
         Element newFarmSupplyProductBought = doc.createElement("farmSupplyProductBought");
-        int newId = handler.getLatestIndex();
+//        int newId = handler.getLatestIndex();
+        NodeList nodeList = doc.getElementsByTagName("farmSupplyProductBought");
+        Element lastNode = (Element) nodeList.item(nodeList.getLength()-1);
+        int newId = Integer.parseInt(lastNode.getAttribute("id"))+1;
         newFarmSupplyProductBought.setAttribute("id",Integer.toString(newId));
 
         Element amount = doc.createElement("amount");

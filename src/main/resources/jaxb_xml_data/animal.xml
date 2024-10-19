@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<animals>
+    <animals id="1">
+        <name>Horse</name>
+    </animals>
+    <animals id="2">
+        <name>Bull</name>
+    </animals>
+    <animals id="3">
+        <name>Bull</name>
+    </animals>
+</animals>

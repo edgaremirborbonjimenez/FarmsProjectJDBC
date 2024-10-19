@@ -1,14 +1,19 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><farmSupplyProductInventories>
-    
+<?xml version="1.0" encoding="UTF-8"?>
+<farmSupplyProductInventories>
+    <farmSupplyProductInventory id="1">
+        <amount>150</amount>
+        <farmId>1</farmId>
+        <productId>1</productId>
+    </farmSupplyProductInventory>
     <farmSupplyProductInventory id="2">
         <amount>200</amount>
         <farmId>1</farmId>
         <productId>2</productId>
     </farmSupplyProductInventory>
     <farmSupplyProductInventory id="3">
-        <amount>10</amount>
-        <farmId>1</farmId>
-        <productId>1</productId>
+        <amount>75</amount>
+        <farmId>2</farmId>
+        <productId>3</productId>
     </farmSupplyProductInventory>
     <farmSupplyProductInventory id="4">
         <amount>50</amount>
@@ -20,4 +25,4 @@
         <farmId>4</farmId>
         <productId>5</productId>
     </farmSupplyProductInventory>
-<farmSupplyProductInventory id="6"><amount>10</amount><farmId>1</farmId><productId>1</productId></farmSupplyProductInventory></farmSupplyProductInventories>
+</farmSupplyProductInventories>

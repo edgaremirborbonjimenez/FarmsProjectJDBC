@@ -95,7 +95,7 @@ public class FarmsSupplyProductBoughtHandler extends DefaultHandler {
 
     @Override
     public void endDocument() throws SAXException {
-        latestIndex = farmSupplyProductBoughtList.size()+1;
+        latestIndex = farmSupplyProductBoughtList.getLast().getId()+1;
     }
 
     @Override

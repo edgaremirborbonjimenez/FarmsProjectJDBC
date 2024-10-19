@@ -1,12 +1,20 @@
 package org.example.domain;
 
+import jakarta.xml.bind.annotation.*;
+
 import java.util.List;
 
+@XmlRootElement(name="farm")
+@XmlType(propOrder = {"id","name","address","owner_id"})
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Farm {
+    @XmlAttribute
     int id;
     String name;
     String address;
+    @XmlElement(name = "ownerId")
     int owner_id;
+    @XmlTransient
     List<Product> products;
 
     public Farm(){}

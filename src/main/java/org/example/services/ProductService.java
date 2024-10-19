@@ -35,6 +35,6 @@ public class ProductService implements IService<Product> {
 
     @Override
     public Product findById(int id) throws Exception {
-        return this.findById(id);
+        return this.productIDAO.findById(id);
     }
 }

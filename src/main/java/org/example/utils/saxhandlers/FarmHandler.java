@@ -75,7 +75,7 @@ public class FarmHandler extends DefaultHandler {
 
     @Override
     public void endDocument() throws SAXException {
-        latestIndex = farmList.size()+1;
+        latestIndex = farmList.getLast().getId()+1;
     }
 
     @Override

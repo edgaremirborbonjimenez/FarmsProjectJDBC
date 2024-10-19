@@ -1,12 +1,17 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><farmAnimals>
-    
+<?xml version="1.0" encoding="UTF-8"?>
+<farmAnimals>
+    <farmAnimal id="1">
+        <amount>20</amount>
+        <farmId>1</farmId>
+        <animalId>1</animalId>
+    </farmAnimal>
     <farmAnimal id="2">
         <amount>15</amount>
         <farmId>1</farmId>
         <animalId>2</animalId>
     </farmAnimal>
     <farmAnimal id="3">
-        <amount>5</amount>
+        <amount>30</amount>
         <farmId>2</farmId>
         <animalId>3</animalId>
     </farmAnimal>
@@ -20,4 +25,4 @@
         <farmId>4</farmId>
         <animalId>4</animalId>
     </farmAnimal>
-<farmAnimal id="6"><amount>5</amount><farmId>1</farmId><animalId>1</animalId></farmAnimal></farmAnimals>
+</farmAnimals>

@@ -52,7 +52,10 @@ public FarmSupplyProductInventory insert(FarmSupplyProductInventory data) throws
     Document doc = builder.parse(xmlFile);
 
     Element farmSupplyProductInventory = doc.createElement("farmSupplyProductInventory");
-    int newId = handler.getLatestIndex();
+//    int newId = handler.getLatestIndex();
+    NodeList nodeList = doc.getElementsByTagName("farmSupplyProductInventory");
+    Element lastNode = (Element) nodeList.item(nodeList.getLength()-1);
+    int newId = Integer.parseInt(lastNode.getAttribute("id"))+1;
     farmSupplyProductInventory.setAttribute("id",Integer.toString(newId));
 
     Element amount = doc.createElement("amount");

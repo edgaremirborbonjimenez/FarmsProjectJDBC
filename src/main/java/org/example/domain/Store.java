@@ -1,6 +1,12 @@
 package org.example.domain;
 
+import jakarta.xml.bind.annotation.*;
+
+@XmlRootElement(name="store")
+@XmlType(propOrder = {"id","name","address"})
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Store {
+    @XmlAttribute
     int id;
     String name;
     String address;

@@ -1,10 +1,15 @@
 package org.example.domain;
 
+import jakarta.xml.bind.annotation.*;
 import org.example.utils.enums.UnitMeasurement;
 
 import java.util.List;
 
+@XmlRootElement(name="product")
+@XmlType(propOrder = {"id","name","price","unitMeasurement"})
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Product {
+    @XmlAttribute
     int id;
     String name;
     double price;
