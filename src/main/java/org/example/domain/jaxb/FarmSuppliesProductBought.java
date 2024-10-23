@@ -9,7 +9,9 @@ import org.example.domain.FarmSupplyProductBought;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FarmSuppliesProductBought {
     FarmSupplyProductBought [] farmSuppliesProductsBought;
-    public FarmSuppliesProductBought(){}
+    public FarmSuppliesProductBought(){
+        this.farmSuppliesProductsBought = new FarmSupplyProductBought[0];
+    }
 
     public FarmSupplyProductBought[] getFarmSuppliesProductsBought() {
         return farmSuppliesProductsBought;

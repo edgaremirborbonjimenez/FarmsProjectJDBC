@@ -37,13 +37,11 @@ public class AnimalJAXB implements IDAO<Animal> {
         return data;
     }
 
-    //Solve problem with xmlEmpty
     @Override
     public int updateById(int id, Animal data) throws Exception {
         int[] updated = {-1};
         Animals sourceData = animalsIMarsheller.unmarshall();
         if(sourceData ==null){
-
             return updated[0];
         }
         Animal[] arr = sourceData.getAnimals();
@@ -63,11 +61,14 @@ public class AnimalJAXB implements IDAO<Animal> {
     public int deleteById(Integer id) throws Exception {
         int[] deleted = {-1};
         Animals sourceData = animalsIMarsheller.unmarshall();
+        if(sourceData ==null){
+            return deleted[0];
+        }
         Animal[] arr = sourceData.getAnimals();
         List<Animal> list = new ArrayList<>(Arrays.stream(arr).toList());
         List<Animal> filtered = list.stream().filter(animal -> {
-            if(animal.getId() != id){
-                deleted[0] = 0;
+            if(animal.getId() == id){
+                deleted[0] = 1;
                 return false;
             }
             return true;
@@ -80,6 +81,9 @@ public class AnimalJAXB implements IDAO<Animal> {
     @Override
     public List<Animal> findAll() throws Exception {
         Animals sourceData = animalsIMarsheller.unmarshall();
+        if(sourceData ==null){
+            return null;
+        }
         Animal[] arr = sourceData.getAnimals();
         return new ArrayList<>(Arrays.stream(arr).toList());
     }
@@ -87,8 +91,17 @@ public class AnimalJAXB implements IDAO<Animal> {
     @Override
     public Animal findById(int id) throws Exception {
         Animals sourceData = animalsIMarsheller.unmarshall();
+        if(sourceData ==null){
+            return null;
+        }
         Animal[] arr = sourceData.getAnimals();
-        return (Animal) Arrays.stream(arr).filter(animal -> animal.getId() == id).toArray()[0];
+
+        for (Animal animal : arr) {
+            if (animal.getId() == id) {
+                return animal;
+            }
+        }
+        return null;
     }
 
     @Override

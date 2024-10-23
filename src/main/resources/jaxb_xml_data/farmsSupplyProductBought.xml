@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<farmSuppliesProductsBought>
+    <farmSuppliesProductsBought id="1">
+        <amount>1</amount>
+        <total>5.0</total>
+        <purchaseDate>2024,10,22 21:45:23</purchaseDate>
+        <farmId>2</farmId>
+        <productId>1</productId>
+    </farmSuppliesProductsBought>
+    <farmSuppliesProductsBought id="2">
+        <amount>10</amount>
+        <total>50.0</total>
+        <purchaseDate>2024,10,22 22:04:49</purchaseDate>
+        <farmId>1</farmId>
+        <productId>3</productId>
+    </farmSuppliesProductsBought>
+</farmSuppliesProductsBought>

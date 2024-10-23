@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<stores>
+    <stores id="1">
+        <name>extra</name>
+        <address>Street</address>
+    </stores>
+    <stores id="3">
+        <name>Abarrotes</name>
+        <address>Street 5</address>
+    </stores>
+</stores>

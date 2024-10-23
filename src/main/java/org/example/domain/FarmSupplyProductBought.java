@@ -1,27 +1,26 @@
 package org.example.domain;
 
 import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.example.utils.marshallers.DateAdapter;
 
 import java.sql.Date;
 
 @XmlRootElement(name="farmSupplyProductBought")
-@XmlType(propOrder = {"id","amount","total","purchaseDate","farmId","productId"})
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {"id","amount","total","purchaseDate","farm_id","product_id"})
 public class FarmSupplyProductBought {
-    @XmlAttribute
     Integer id;
     Integer amount;
     Double total;
     Date purchaseDate;
-    @XmlElement(name = "farmId")
     Integer farm_id;
-    @XmlElement(name = "productId")
     Integer product_id;
 
     public Integer getId() {
         return id;
     }
 
+    @XmlAttribute
     public void setId(Integer id) {
         this.id = id;
     }
@@ -46,6 +45,7 @@ public class FarmSupplyProductBought {
         return purchaseDate;
     }
 
+    @XmlJavaTypeAdapter(DateAdapter.class)
     public void setPurchaseDate(Date purchaseDate) {
         this.purchaseDate = purchaseDate;
     }
@@ -54,6 +54,7 @@ public class FarmSupplyProductBought {
         return farm_id;
     }
 
+    @XmlElement(name = "farmId")
     public void setFarm_id(Integer farm_id) {
         this.farm_id = farm_id;
     }
@@ -62,6 +63,7 @@ public class FarmSupplyProductBought {
         return product_id;
     }
 
+    @XmlElement(name = "productId")
     public void setProduct_id(Integer product_id) {
         this.product_id = product_id;
     }

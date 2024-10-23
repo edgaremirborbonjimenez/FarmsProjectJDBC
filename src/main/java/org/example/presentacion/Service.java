@@ -2,12 +2,18 @@ package org.example.presentacion;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.Main;
+import org.example.daos.jaxb.*;
 import org.example.daos.jdbc.*;
 import org.example.daos.xml.*;
 import org.example.domain.*;
+import org.example.domain.jaxb.*;
 import org.example.interfaces.IConnection;
+import org.example.interfaces.IDAO;
+import org.example.interfaces.IMarsheller;
 import org.example.services.*;
 import org.example.utils.connection.HikariCPImplementation;
+import org.example.utils.marshallers.GenericMarshaller;
 import org.example.utils.saxhandlers.*;
 
 import java.io.FileReader;
@@ -84,6 +90,39 @@ public class Service {
             logger.error(e.getMessage());
         }
 
+    }
+
+    public void useJAXB(){
+        try{
+            Properties properties = new Properties();
+            properties.load(Service.class.getClassLoader().getResourceAsStream("env.properties"));
+
+            IMarsheller<Animals> animalsIMarsheller = new GenericMarshaller<>(properties.getProperty("xml.jaxb.animal"), Animals.class);
+            IDAO<Animal> animalIDAO = new AnimalJAXB(animalsIMarsheller);
+            animalService = new AnimalService(animalIDAO);
+
+            IMarsheller<Farms> farmsIMarsheller = new GenericMarshaller<>(properties.getProperty("xml.jaxb.farm"),Farms.class);
+            IDAO<Farm> farmIDAO = new FarmJAXB(farmsIMarsheller);
+            farmService = new FarmService(farmIDAO);
+
+            IMarsheller<Owners> ownersIMarsheller = new GenericMarshaller<>(properties.getProperty("xml.jaxb.owner"), Owners.class);
+            IDAO<Owner> ownerIDAO = new OwnerJAXB(ownersIMarsheller);
+            ownerService = new OwnerService(ownerIDAO);
+
+            IMarsheller<Products> productsIMarsheller = new GenericMarshaller<>(properties.getProperty("xml.jaxb.product"), Products.class);
+            IDAO<Product> productIDAO = new ProductJAXB(productsIMarsheller);
+            productService = new ProductService(productIDAO);
+
+            IMarsheller<Stores> storesIMarsheller = new GenericMarshaller<>(properties.getProperty("xml.jaxb.store"),Stores.class);
+            IDAO<Store> storeIDAO = new StoreJAXB(storesIMarsheller);
+            storeService = new StoreService(storeIDAO);
+
+            IMarsheller<FarmSuppliesProductBought> farmSupplyB = new GenericMarshaller<>(properties.getProperty("xml.jaxb.farmsSupplyProductBought"), FarmSuppliesProductBought.class );
+            IDAO<FarmSupplyProductBought> farmSuplyBDAO = new FarmsSupplyProductsBoughtJAXB(farmSupplyB);
+            farmSupplyProductBoughtService = new FarmSupplyProductBoughtService(farmSuplyBDAO);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
     }
 
     public void createAnimal(Animal animal){

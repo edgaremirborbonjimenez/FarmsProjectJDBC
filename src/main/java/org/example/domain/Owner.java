@@ -1,11 +1,10 @@
 package org.example.domain;
 
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.*;
 
 @XmlRootElement(name = "owner")
 @XmlType(propOrder = {"id","fullName","phone","email"})
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Owner {
     @XmlAttribute
     int id;
