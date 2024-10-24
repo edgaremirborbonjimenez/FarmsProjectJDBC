@@ -28,7 +28,8 @@ public class Menu {
             System.out.println("1. Database");
             System.out.println("2. XML");
             System.out.println("3. JAXB");
-            System.out.println("4. Exit");
+            System.out.println("4. JSON");
+            System.out.println("5. Exit");
             System.out.print("Opción: ");
 
             if(!scanner.hasNextInt()){
@@ -58,6 +59,12 @@ public class Menu {
                     exit = true;
                     break;
                 case 4:
+                    System.out.println("JSON Selected");
+                    service.useJSON();
+                    selectEntity = true;
+                    exit = true;
+                    break;
+                case 5:
                     System.out.println("Closing program...");
                     exit = true;
                     break;

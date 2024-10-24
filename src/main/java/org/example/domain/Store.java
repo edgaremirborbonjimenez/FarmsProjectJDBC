@@ -1,14 +1,20 @@
 package org.example.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.xml.bind.annotation.*;
 
 @XmlRootElement(name="store")
 @XmlType(propOrder = {"id","name","address"})
 @XmlAccessorType(XmlAccessType.FIELD)
+@JsonPropertyOrder({"id","name","address"})
 public class Store {
     @XmlAttribute
+    @JsonProperty("id")
     int id;
+    @JsonProperty("name")
     String name;
+    @JsonProperty("address")
     String address;
 
     public Store(){}

@@ -1,19 +1,39 @@
 package org.example.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.xml.bind.annotation.*;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.example.utils.json.CustomDateDeserializer;
+import org.example.utils.json.CustomDateSerializer;
 import org.example.utils.marshallers.DateAdapter;
 
 import java.sql.Date;
 
 @XmlRootElement(name="farmSupplyProductBought")
 @XmlType(propOrder = {"id","amount","total","purchaseDate","farm_id","product_id"})
+@JsonPropertyOrder({"id","amount","total","purchaseDate","farm_id","product_id"})
 public class FarmSupplyProductBought {
+    @JsonProperty("id")
     Integer id;
+
+    @JsonProperty("amount")
     Integer amount;
+
+    @JsonProperty("total")
     Double total;
+
+    @JsonProperty("purchaseDate")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     Date purchaseDate;
+
+    @JsonProperty("farmId")
     Integer farm_id;
+
+    @JsonProperty("productId")
     Integer product_id;
 
     public Integer getId() {

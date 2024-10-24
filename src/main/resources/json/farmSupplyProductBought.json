@@ -1,0 +1,8 @@
+[ {
+  "id" : 2,
+  "amount" : 5,
+  "total" : 50.0,
+  "purchaseDate" : "23-10-2024 11:24:12",
+  "farmId" : 1,
+  "productId" : 2
+} ]

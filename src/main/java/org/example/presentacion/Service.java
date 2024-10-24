@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.example.Main;
 import org.example.daos.jaxb.*;
 import org.example.daos.jdbc.*;
+import org.example.daos.json.*;
 import org.example.daos.xml.*;
 import org.example.domain.*;
 import org.example.domain.jaxb.*;
@@ -17,6 +18,7 @@ import org.example.utils.marshallers.GenericMarshaller;
 import org.example.utils.saxhandlers.*;
 
 import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Properties;
@@ -92,6 +94,7 @@ public class Service {
 
     }
 
+
     public void useJAXB(){
         try{
             Properties properties = new Properties();
@@ -121,6 +124,21 @@ public class Service {
             IDAO<FarmSupplyProductBought> farmSuplyBDAO = new FarmsSupplyProductsBoughtJAXB(farmSupplyB);
             farmSupplyProductBoughtService = new FarmSupplyProductBoughtService(farmSuplyBDAO);
         }catch (Exception e){
+            logger.error(e.getMessage());
+        }
+    }
+
+    public void useJSON(){
+        try {
+            Properties properties = new Properties();
+            properties.load(Service.class.getClassLoader().getResourceAsStream("env.properties"));
+            animalService = new AnimalService(new AnimalJSON(properties.getProperty("json.animal")));
+            farmService = new FarmService(new FarmJSON(properties.getProperty("json.farm")));
+            ownerService = new OwnerService(new OwnerJSON(properties.getProperty("json.owner")));
+            productService = new ProductService(new ProductJSON(properties.getProperty("json.product")));
+            storeService = new StoreService(new StoreJSON(properties.getProperty("json.store")));
+            farmSupplyProductBoughtService = new FarmSupplyProductBoughtService(new FarmsSupplyProductBoughtJSON(properties.getProperty("json.farmSupplyProductBought")));
+        }catch (IOException e){
             logger.error(e.getMessage());
         }
     }

@@ -1,5 +1,8 @@
 package org.example.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.xml.bind.annotation.*;
 
 import java.util.List;
@@ -7,13 +10,19 @@ import java.util.List;
 @XmlRootElement(name="farm")
 @XmlType(propOrder = {"id","name","address","owner_id"})
 @XmlAccessorType(XmlAccessType.FIELD)
+@JsonPropertyOrder({"id","name","address","owner_id"})
 public class Farm {
     @XmlAttribute
+    @JsonProperty("id")
     int id;
+    @JsonProperty("name")
     String name;
+    @JsonProperty("address")
     String address;
+    @JsonProperty("ownerId")
     @XmlElement(name = "ownerId")
     int owner_id;
+    @JsonIgnore
     @XmlTransient
     List<Product> products;
 
