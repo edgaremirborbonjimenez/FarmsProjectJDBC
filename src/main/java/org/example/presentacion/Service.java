@@ -3,6 +3,7 @@ package org.example.presentacion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.daos.jdbc.*;
+import org.example.daos.mybatis.*;
 import org.example.daos.xml.*;
 import org.example.domain.*;
 import org.example.interfaces.IConnection;
@@ -84,6 +85,16 @@ public class Service {
             logger.error(e.getMessage());
         }
 
+    }
+
+    public void useMyBatis(){
+        animalService = new AnimalService(new AnimalMyBatis());
+        ownerService = new OwnerService(new OwnerMyBatis());
+        farmService = new FarmService(new FarmMyBatis());
+        productService = new ProductService(new ProductMyBatis());
+        storeService = new StoreService(new StoreMyBatis());
+        farmSupplyProductBoughtService = new FarmSupplyProductBoughtService(new FarmSupplyProductBoughtMyBatis());
+        logger.info("Data Source with MyBaris assigned");
     }
 
     public void createAnimal(Animal animal){
