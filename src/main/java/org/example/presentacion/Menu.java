@@ -23,6 +23,7 @@ public class Menu {
             System.out.println("Select Data Source:");
             System.out.println("1. Database");
             System.out.println("2. XML");
+            System.out.println("5. MyBatis");
             System.out.println("3. Exit");
             System.out.print("Opción: ");
 
@@ -50,6 +51,11 @@ public class Menu {
                     System.out.println("Closing program...");
                     exit = true;
                     break;
+                case 5:
+                    System.out.println("MyBatis Selected");
+                    service.useMyBatis();
+                    selectEntity = true;
+                    exit = true;
                 default:
                     System.out.println("Select a valid option");
             }
