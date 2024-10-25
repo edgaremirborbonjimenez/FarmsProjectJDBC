@@ -14,4 +14,11 @@
         <farmId>1</farmId>
         <productId>3</productId>
     </farmSuppliesProductsBought>
+    <farmSuppliesProductsBought id="3">
+        <amount>10</amount>
+        <total>50.0</total>
+        <purchaseDate>2024,10,25 10:51:12</purchaseDate>
+        <farmId>2</farmId>
+        <productId>3</productId>
+    </farmSuppliesProductsBought>
 </farmSuppliesProductsBought>
