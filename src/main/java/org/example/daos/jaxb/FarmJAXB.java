@@ -23,9 +23,15 @@ public class FarmJAXB implements IDAO<Farm> {
     @Override
     public Farm insert(Farm data) throws Exception {
         Farms sourceData = farmsIMarsheller.unmarshall();
+        if(sourceData == null){
+            sourceData = new Farms();
+        }
         Farm[] arr = sourceData.getFarms();
         List<Farm> list = new ArrayList<>(Arrays.stream(arr).toList());
-        int index = list.getLast().getId()+1;
+        int index = 1;
+        if(!list.isEmpty()){
+            index = list.getLast().getId()+1;
+        }
         data.setId(index);
         list.add(data);
         sourceData.setFarms(list.toArray(new Farm[0]));
@@ -37,6 +43,9 @@ public class FarmJAXB implements IDAO<Farm> {
     public int updateById(int id, Farm data) throws Exception {
         int[] updated = {-1};
         Farms sourceData = farmsIMarsheller.unmarshall();
+        if(sourceData ==null){
+            return updated[0];
+        }
         Farm[] arr = sourceData.getFarms();
         List<Farm> list = new ArrayList<>(Arrays.stream(arr).toList());
         list.forEach(farm -> {
@@ -56,11 +65,14 @@ public class FarmJAXB implements IDAO<Farm> {
     public int deleteById(Integer id) throws Exception {
         int[] deleted = {-1};
         Farms sourceData = farmsIMarsheller.unmarshall();
+        if(sourceData ==null){
+            return deleted[0];
+        }
         Farm[] arr = sourceData.getFarms();
         List<Farm> list = new ArrayList<>(Arrays.stream(arr).toList());
         List<Farm> filtered = list.stream().filter(farm -> {
-            if(farm.getId() != id){
-                deleted[0] = 0;
+            if(farm.getId() == id){
+                deleted[0] = 1;
                 return false;
             }
             return true;
@@ -73,6 +85,9 @@ public class FarmJAXB implements IDAO<Farm> {
     @Override
     public List<Farm> findAll() throws Exception {
         Farms sourceData = farmsIMarsheller.unmarshall();
+        if(sourceData ==null){
+            return null;
+        }
         Farm[] arr = sourceData.getFarms();
         return new ArrayList<>(Arrays.stream(arr).toList());
     }
@@ -80,8 +95,16 @@ public class FarmJAXB implements IDAO<Farm> {
     @Override
     public Farm findById(int id) throws Exception {
         Farms sourceData = farmsIMarsheller.unmarshall();
+        if(sourceData ==null){
+            return null;
+        }
         Farm[] arr = sourceData.getFarms();
-        return (Farm) Arrays.stream(arr).filter(farm -> farm.getId() == id).toArray()[0];
+        for (Farm farm : arr) {
+            if (farm.getId() == id) {
+                return farm;
+            }
+        }
+        return null;
     }
 
     @Override

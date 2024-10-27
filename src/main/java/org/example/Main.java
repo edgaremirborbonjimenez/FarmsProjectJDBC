@@ -1,434 +1,491 @@
 package org.example;
 
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.daos.jaxb.AnimalJAXB;
-import org.example.daos.jaxb.FarmJAXB;
-import org.example.daos.jdbc.*;
-import org.example.daos.xml.*;
+import org.example.daos.json.*;
 import org.example.domain.*;
-import org.example.domain.jaxb.Animals;
-import org.example.domain.jaxb.Farms;
-import org.example.interfaces.IConnection;
-import org.example.interfaces.IDAO;
-import org.example.interfaces.IMarsheller;
-import org.example.utils.connection.HikariCPImplementation;
+import org.example.presentacion.Service;
 import org.example.utils.enums.UnitMeasurement;
-import org.example.utils.marshallers.AnimalMarshaller;
-import org.example.utils.marshallers.GenericMarshaller;
-import org.example.utils.saxhandlers.*;
 
-import javax.xml.XMLConstants;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 import java.io.File;
-import java.io.FileReader;
-import java.sql.Connection;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.math.BigDecimal;
 import java.util.Properties;
-
 
 public class Main {
 
     private static final Logger logger = LogManager.getLogger();
 
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception, DatabindException {
 
-        IConnection<Connection> hikari = HikariCPImplementation.getInstance();
-        hikari.setPoolSize(5);
-//        HikariCPImplementation.getInstance().getConnectionFromPool();
-//        HikariCPImplementation.getInstance().getConnectionFromPool();
-//        HikariCPImplementation.getInstance().getConnectionFromPool();
-//        HikariCPImplementation.getInstance().getConnectionFromPool();
-//        Connection con = HikariCPImplementation.getInstance().getConnectionFromPool();
-//        //con.close();
-//        HikariCPImplementation.getInstance().releaseConnection(con);
-//        HikariCPImplementation.getInstance().getConnectionFromPool();
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.configure(SerializationFeature.INDENT_OUTPUT,true);
+//    objectMapper.enable(SerializationFeature.WRAP_ROOT_VALUE);//Takes the class root name, if it does not have takes the class name
+    ExtendableBean bean = new ExtendableBean(1,"My bean",new Date(System.currentTimeMillis()));
+    bean.add("attr1", "val1");
+    bean.add("attr2", "val2");
 
+    BeanWithInclude beanI = new BeanWithInclude(1, "My bean");
+        String res1 = objectMapper.writeValueAsString(beanI);
+        System.out.println(res1);
+        System.out.println();
+    String res = objectMapper.writeValueAsString(bean);
+        System.out.println(res);
 
-        AnimalsIDAO animalsIDAO = AnimalsIDAO.getInstance();
-        animalsIDAO.setPoolConnection(hikari);
-//        Animal animal = new Animal();
-//        animal.setName("Chicken");
-//        Animal created = animalsIDAO.insert(animal);
-//        System.out.println(created);
-//        created.setName("RedChicken");
-//        int amountUpdated = animalsIDAO.updateById(created.getId(), created);
-//        System.out.println(amountUpdated);
-//        int rowsAffected = animalsIDAO.deleteById(5);
-//        System.out.println(rowsAffected);
-//        animalsIDAO.findAll().forEach(a-> System.out.println(a));
-//        System.out.println(animalsIDAO.findById(1));
+        System.out.println();
+        String enumString = objectMapper.writeValueAsString(TypeEnumWithValue.TYPE1);
+        System.out.println(enumString); //WRAP_ROOT_VALUE affected the result
 
-        FarmsIDAO farmsIDAO = FarmsIDAO.getInstance();
-        farmsIDAO.setPoolConnection(hikari);
-//        Farm farm = new Farm();
-//        farm.setName("EmirFarm");
-//        farm.setAddress("Street");
-//        farm.setOwner_id(1);
-//        Farm farmCreated = farmsIDAO.insert(farm);
-//        System.out.println(farmCreated);
-//        farmsIDAO.findAll().forEach(f-> System.out.println(f.toString()));
-//        Farm update = new Farm();
-//        update.setAddress("Street 2");
-//        System.out.println(farmsIDAO.updateById(farm.getId(),update));
-//        System.out.println(farmsIDAO.findById(farm.getId()));
+        System.out.println();
+        ExtendableBean select = objectMapper.readerFor(ExtendableBean.class).readValue(res);
+        System.out.println(select);
+//    Employee[] emp = objectMapper.readValue(new File("src/main/resources/json/test.json"),Employee[].class);
+//    for(Employee e : emp){
+//        System.out.println(e);
+//    }
+//        System.out.println(emp);
+//        Map<?,?> empMap = objectMapper.readValue(new FileInputStream("src/main/resources/json/test.json"),Map.class);
+//        for (Map.Entry<?, ?> entry : empMap.entrySet())
+//        {
+//            System.out.println("\n----------------------------\n"+entry.getKey() + "=" + entry.getValue()+"\n");
+//        }
 
-        OwnersIDAO ownersIDAO = OwnersIDAO.getInstance();
-        ownersIDAO.setPoolConnection(hikari);
-//        Owner owner = new Owner();
-//        owner.setFullName("Peter");
-//        owner.setPhone("9876547898");
-//        owner.setEmail("hello@gmail.com");
-//        Owner ownerCreated = ownersIDAO.insert(owner);
-//        System.out.println(ownerCreated);
-//        Owner update = new Owner();
-//        update.setPhone("0000000000");
-//        System.out.println(ownersIDAO.updateById(ownerCreated.getId(),update));
-//        ownersIDAO.findAll().forEach(o -> System.out.println(o));
-//        System.out.println(ownersIDAO.findById(ownerCreated.getId()));
-//        System.out.println(ownersIDAO.deleteById(ownerCreated.getId()));
-
-        ProductsIDAO productsIDAO = ProductsIDAO.getInstance();
-        productsIDAO.setPoolConnection(hikari);
-//        Product newProduct = new Product();
-//        newProduct.setName("Eggs");
-//        newProduct.setPrice(20.99);
-//        newProduct.setUnitMeasurement(UnitMeasurement.pc.unit);
-//        Product productCreated = productsIDAO.insert(newProduct);
-//        Product update = new Product();
-//        update.setPrice(15.99);
-//        System.out.println(productsIDAO.updateById(productCreated.getId(),update));
-//        productsIDAO.findAll().forEach(p -> System.out.println(p));
-//        System.out.println(productsIDAO.findById(productCreated.getId()));
-
-        StoresIDAO storesIDAO = StoresIDAO.getInstance();
-        storesIDAO.setPoolConnection(hikari);
-//        Store newStore = new Store();
-//        newStore.setName("Abarrotes");
-//        newStore.setAddress("Street");
-//        Store storeCreated = storesIDAO.insert(newStore);
-//        System.out.println(storeCreated);
-//        Store update = new Store();
-//        update.setAddress("Street2");
-//        System.out.println(storesIDAO.updateById(storeCreated.getId(),update));
-//        storesIDAO.findAll().forEach(System.out::println);
-//        System.out.println(storesIDAO.findById(storeCreated.getId()));
-
-        FarmsAnimalsIDAO farmsAnimalsIDAO = FarmsAnimalsIDAO.getInstance();
-        farmsAnimalsIDAO.setPoolConnection(hikari);
-//        FarmAnimal farmAnimal = new FarmAnimal();
-//        farmAnimal.setAmount(20);
-//        farmAnimal.setFarm_id(1);
-//        farmAnimal.setAnimal_id(1);
-//        FarmAnimal farmAnimalCreated = farmsAnimalsIDAO.insert(farmAnimal);
-//        System.out.println(farmAnimalCreated);
-//        FarmAnimal update = new FarmAnimal();
-//        update.setAnimal_id(2);
-//        System.out.println(farmsAnimalsIDAO.updateById(farmAnimalCreated.getId(),update));
-//        farmsAnimalsIDAO.findAll().forEach(System.out::println);
-//        System.out.println(farmsAnimalsIDAO.findById(farmAnimalCreated.getId()));
-
-        FarmsSupplyProductsBoughtIDAO farmsSupplyProductsBoughtIDAO = FarmsSupplyProductsBoughtIDAO.getInstance();
-        farmsSupplyProductsBoughtIDAO.setPoolConnection(hikari);
-//        FarmSupplyProductBought f = new FarmSupplyProductBought();
-//        f.setAmount(20);
-//        f.setTotal(15.99*20);
-//        f.setFarm_id(1);
-//        f.setProduct_id(5);
-//        FarmSupplyProductBought created = farmsSupplyProductsBoughtIDAO.insert(f);
-//        System.out.println(created);
-//        FarmSupplyProductBought update = new FarmSupplyProductBought();
-//        update.setFarm_id(2);
-//        System.out.println(farmsSupplyProductsBoughtIDAO.updateById(created.getId(),update));
-//        farmsSupplyProductsBoughtIDAO.findAll().forEach(System.out::println);
-//        System.out.println(farmsSupplyProductsBoughtIDAO.findById(created.getId()));
-        FarmsSupplyProductsInventoryIDAO farmsSupplyProductsInventoryIDAO = FarmsSupplyProductsInventoryIDAO.getInstance();
-        farmsSupplyProductsInventoryIDAO.setPoolConnection(hikari);
-//        FarmSupplyProductInventory f = new FarmSupplyProductInventory();
-//        f.setAmount(20);
-//        f.setFarm_id(1);
-//        f.setProduct_id(5);
-//        FarmSupplyProductInventory created = farmsSupplyProductsInventoryIDAO.insert(f);
-//        System.out.println(created);
-//        FarmSupplyProductInventory update = new FarmSupplyProductInventory();
-//        update.setAmount(30);
-//        System.out.println(farmsSupplyProductsInventoryIDAO.updateById(created.getId(),update));
-//        farmsSupplyProductsInventoryIDAO.findAll().forEach(System.out::println);
-//        System.out.println(farmsSupplyProductsInventoryIDAO.findById(created.getId()));
-
-        StoresProductsBoughtDAO storesProductsBoughtDAO = StoresProductsBoughtDAO.getInstance();
-        storesProductsBoughtDAO.setPoolConnection(hikari);
-//        StoreProductBought newObject = new StoreProductBought();
-//        newObject.setAmount(20);
-//        newObject.setTotal(20*15.99);
-//        newObject.setStore_id(1);
-//        newObject.setProduct_id(5);
-//        StoreProductBought created = storesProductsBoughtDAO.insert(newObject);
-//        System.out.println(created);
-//        StoreProductBought update = new StoreProductBought();
-//        update.setStore_id(2);
-//        System.out.println(storesProductsBoughtDAO.updateById(created.getId(),update));
-//        storesProductsBoughtDAO.findAll().forEach(System.out::println);
-//        System.out.println(storesProductsBoughtDAO.findById(created.getId()));
-
-        AnimalsXML animalsXML = new AnimalsXML("src/main/resources/xml_data/animals.xml", new AnimalsHandler());
-//        animalsXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(animalsXML.findById(1));
-//        System.out.println();
-//        Animal animal = new Animal();
-//        animal.setName("Horse");
-//        System.out.println(animalsXML.insert(animal));
-//        System.out.println();
-//        animalsXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(animalsXML.deleteById(1));
-//        System.out.println();
-//        animalsXML.findAll().forEach(System.out::println);
-//          Animal animal1 = new Animal();
-//          animal.setName("Dog");
-//        System.out.println(animalsXML.updateById(2,animal1));
-
-//        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-//        Schema schema = schemaFactory.newSchema(new File("src/main/java/org/example/utils/xsd/animal.xsd"));
-//        Validator validator =  schema.newValidator();
+//        Employee employee = new Employee();
+//        employee.setAge(20);
+//        Address address = new Address();
+//        address.setCity("City1");
+//        address.setStreet("Street1");
+//        address.setZipcode(85870);
+//        employee.setAddress(address);
+//        employee.setDesignation("Porgammer");
+//        employee.setName("Juan");
+//        employee.setSalary(new BigDecimal(2000));
 //
-//        validator.validate(new StreamSource(new File("src/main/resources/xml_data/animals.xml")));
-//        System.out.println("El archivo es valido");
+//        Employee[] list = {employee};
+//
+//        String jsonInString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
+//        objectMapper.configure(SerializationFeature.INDENT_OUTPUT,true);
+//        objectMapper.writeValue(new File("src/main/resources/json/test.json"),list);
 
-
-        OwnerXML ownerXML = new OwnerXML("src/main/resources/xml_data/owners.xml", new OwnerHandler());
-//        ownerXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(ownerXML.findById(1));
-//        System.out.println();
-//        Owner owner = new Owner();
-//        owner.setFullName("Juan Escutia");
-//        owner.setPhone("9879879874");
-//        owner.setEmail("juan@gmail.com");
-//        System.out.println(ownerXML.insert(owner));
-//        System.out.println();
-//        ownerXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(ownerXML.deleteById(1));
-//        System.out.println();
-//        ownerXML.findAll().forEach(System.out::println);
-//        Owner owner1 = new Owner();
-//        owner1.setFullName("Luis Alberto");
-//        owner1.setEmail("luis@gmail.com");
-//        System.out.println(ownerXML.updateById(2,owner1));
-
-        FarmsXML farmsXML = new FarmsXML("src/main/resources/xml_data/farms.xml", new FarmHandler());
-//        farmsXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(farmsXML.findById(1));
-//        System.out.println();
-//        Farm farm = new Farm();
-//        farm.setName("Juans Farm");
-//        farm.setAddress("Street 3");
-//        farm.setOwner_id(1);
-//        System.out.println(farmsXML.insert(farm));
-//        System.out.println();
-//        farmsXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(farmsXML.deleteById(1));
-//        System.out.println();
-//        farmsXML.findAll().forEach(System.out::println);
-//        Farm farm1 = new Farm();
-//        farm1.setName("Granjona");
-//        farm1.setAddress("Valley Lake");
-//        farm1.setOwner_id(1);
-//        System.out.println(farmsXML.updateById(3,farm1));
-
-        ProductsXML productsXML = new ProductsXML("src/main/resources/xml_data/products.xml", new ProducHandler());
-//        productsXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(productsXML.findById(1));
-//        System.out.println();
-//        Product product = new Product();
-//        product.setName("CocaCola");
-//        product.setPrice(5);
-//        product.setUnitMeasurement(UnitMeasurement.pc.unit);
-//        System.out.println(productsXML.insert(product));
-//        System.out.println();
-//        productsXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(productsXML.deleteById(1));
-//        System.out.println();
-//        productsXML.findAll().forEach(System.out::println);
-//        Product product1 = new Product();
-//        product1.setName("Sabritas");
-//        product1.setPrice(3);
-//        product1.setUnitMeasurement(UnitMeasurement.pc.unit);
-//        System.out.println(productsXML.updateById(3,product1));
-
-        StoresXML storesXML = new StoresXML("src/main/resources/xml_data/stores.xml", new StoreHandler());
-//        storesXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(storesXML.findById(1));
-//        System.out.println();
-//        Store store = new Store();
-//        store.setName("Abarrotes Choco");
-//        store.setAddress("Street 2");
-//        System.out.println(storesXML.insert(store));
-//        System.out.println();
-//        storesXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(storesXML.deleteById(1));
-//        System.out.println();
-//        storesXML.findAll().forEach(System.out::println);
-//        Store store1 = new Store();
-//        store1.setName("OXXO");
-//        store1.setAddress("Street 3");
-//        System.out.println(storesXML.updateById(3,store1));
-
-        FarmsAnimalsXML farmsAnimalsXML = new FarmsAnimalsXML("src/main/resources/xml_data/farmAnimals.xml", new FarmsAnimalsHandler());
-//        farmsAnimalsXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(farmsAnimalsXML.findById(1));
-//        System.out.println();
-//        FarmAnimal farmAnimal = new FarmAnimal();
-//        farmAnimal.setAmount(5);
-//        farmAnimal.setFarm_id(1);
-//        farmAnimal.setAnimal_id(1);
-//        System.out.println(farmsAnimalsXML.insert(farmAnimal));
-//        System.out.println();
-//        farmsAnimalsXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(farmsAnimalsXML.deleteById(1));
-//        System.out.println();
-//        farmsAnimalsXML.findAll().forEach(System.out::println);
-//        FarmAnimal farmAnimal1 = new FarmAnimal();
-//        farmAnimal1.setAmount(5);
-//        farmAnimal1.setFarm_id(2);
-//        farmAnimal1.setAnimal_id(2);
-//        System.out.println(farmsAnimalsXML.updateById(3,farmAnimal1));
-
-        FarmsSupplyProductsBoughtXML farmsSupplyProductsBoughtXML = new FarmsSupplyProductsBoughtXML("src/main/resources/xml_data/farmsSupplyProductBought.xml", new FarmsSupplyProductBoughtHandler());
-//        farmsSupplyProductsBoughtXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(farmsSupplyProductsBoughtXML.findById(1));
-//        System.out.println();
-//        FarmSupplyProductBought farmSupplyProductBought = new FarmSupplyProductBought();
-//        farmSupplyProductBought.setAmount(5);
-//        farmSupplyProductBought.setTotal(50d);
-//        farmSupplyProductBought.setPurchaseDate(new Date(System.currentTimeMillis()));
-//        farmSupplyProductBought.setFarm_id(1);
-//        farmSupplyProductBought.setProduct_id(1);
-//        System.out.println(farmsSupplyProductsBoughtXML.insert(farmSupplyProductBought));
-//        System.out.println();
-//        farmsSupplyProductsBoughtXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(farmsSupplyProductsBoughtXML.deleteById(1));
-//        System.out.println();
-//        farmsSupplyProductsBoughtXML.findAll().forEach(System.out::println);
-//        FarmSupplyProductBought farmSupplyProductBought1 = new FarmSupplyProductBought();
-//        farmSupplyProductBought1.setAmount(5);
-//        farmSupplyProductBought1.setTotal(50d);
-//        farmSupplyProductBought1.setPurchaseDate(new Date(System.currentTimeMillis()));
-//        farmSupplyProductBought1.setFarm_id(1);
-//        farmSupplyProductBought1.setProduct_id(1);
-//        System.out.println(farmsSupplyProductsBoughtXML.updateById(3,farmSupplyProductBought1));
-
-        FarmsSupplyProductsInventoryXML farmsSupplyProductsInventoryXML = new FarmsSupplyProductsInventoryXML("src/main/resources/xml_data/farmSupplyProductInventory.xml", new FarmSupplyProductInventoryHandler());
-//        farmsSupplyProductsInventoryXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(farmsSupplyProductsInventoryXML.findById(1));
-//        System.out.println();
-//        FarmSupplyProductInventory f =  new FarmSupplyProductInventory();
-//        f.setAmount(10);
-//        f.setFarm_id(1);
-//        f.setProduct_id(1);
-//        System.out.println(farmsSupplyProductsInventoryXML.insert(f));
-//        System.out.println();
-//        farmsSupplyProductsInventoryXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(farmsSupplyProductsInventoryXML.deleteById(1));
-//        System.out.println();
-//        farmsSupplyProductsInventoryXML.findAll().forEach(System.out::println);
-//        FarmSupplyProductInventory f1 =  new FarmSupplyProductInventory();
-//        f1.setAmount(10);
-//        f1.setFarm_id(1);
-//        f1.setProduct_id(1);
-//        System.out.println(farmsSupplyProductsInventoryXML.updateById(3,f1));
-
-        StoresProductsBoughtXML storesProductsBoughtXML = new StoresProductsBoughtXML("src/main/resources/xml_data/storeProductBought.xml", new StoreProductBoughtHandler());
-//        storesProductsBoughtXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(storesProductsBoughtXML.findById(1));
-//        System.out.println();
-//        StoreProductBought s = new StoreProductBought();
-//        s.setAmount(10);
-//        s.setTotal(50d);
-//        s.setProduct_id(1);
-//        s.setStore_id(1);
-//        System.out.println(storesProductsBoughtXML.insert(s));
-//        System.out.println();
-//        storesProductsBoughtXML.findAll().forEach(System.out::println);
-//        System.out.println();
-//        System.out.println(storesProductsBoughtXML.deleteById(1));
-//        System.out.println();
-//        storesProductsBoughtXML.findAll().forEach(System.out::println);
-//        StoreProductBought s1 = new StoreProductBought();
-//        s1.setAmount(10);
-//        s1.setTotal(50d);
-//        s1.setProduct_id(1);
-//        s1.setStore_id(1);
-//        System.out.println(storesProductsBoughtXML.updateById(3,s1));
 
         Properties properties = new Properties();
-        FileReader input = new FileReader("src/main/resources/env.properties");
-        properties.load(input);
-        IMarsheller<Animals> animalsIMarsheller = new GenericMarshaller<>(properties.getProperty("xml.jaxb.animal"), Animals.class);
-        IDAO<Animal> animalIDAO = new AnimalJAXB(animalsIMarsheller);
+        properties.load(Main.class.getClassLoader().getResourceAsStream("env.properties"));
+        AnimalJSON animalJSON = new AnimalJSON(properties.getProperty("json.animal"));
+
         Animal animal = new Animal();
-        animal.setName("Bull");
-        animal = animalIDAO.insert(animal);
+        animal.setName("Goat");
+        Animal animal2 = new Animal();
+        animal2.setName("Vaca");
+//        animalJSON.insert(animal);
+//        animalJSON.insert(animal2);
 
-        animalIDAO.findAll().forEach(System.out::println);
+//        animalJSON.updateById(2,animal);
+//        animalJSON.deleteById(1);
+            //animalJSON.findAll().forEach(System.out::println);
+//        System.out.println(animalJSON.findById(1));
 
-//        Animal animalUpdated = new Animal();
-//        animalUpdated.setName("Horse");
-//        animalIDAO.updateById(1,animalUpdated);
-//
-//        System.out.println(animalIDAO.findById(1));
-//
-//        animalIDAO.deleteById(1);
-//        System.out.println(animalIDAO.findById(1));
+        FarmJSON farmJSON = new FarmJSON(properties.getProperty("json.farm"));
+        Farm farm = new Farm();
+        farm.setName("JoyFarm");
+        farm.setOwner_id(1);
+        farm.setAddress("Town 1");
+        Farm farm2 = new Farm();
+        farm2.setName("FARM");
+        farm2.setOwner_id(1);
+        farm2.setAddress("Town 2");
+//        farmJSON.insert(farm);
+//        farmJSON.insert(farm2);
+        farm.setName("extra");
+        farm.setOwner_id(1);
+        farm.setAddress("Address 1");
+//        farmJSON.updateById(1,farm);
+//        farmJSON.deleteById(1);
+//        farmJSON.findAll().forEach(System.out::println);
+//        System.out.println(farmJSON.findById(2));
 
-//        IMarsheller<Farms> farmsIMarsheller = new GenericMarshaller<>(properties.getProperty("xml.jaxb.farm"), Farms.class);
-//        IDAO<Farm> farmIDAO = new FarmJAXB(farmsIMarsheller);
-//        Farm farm = new Farm();
-//        farm.setName("JoyFarm");
-//        farm.setAddress("Town 2");
-//        farm.setOwner_id(1);
-//        farmIDAO.insert(farm);
+        OwnerJSON ownerJSON = new OwnerJSON(properties.getProperty("json.owner"));
+        Owner owner = new Owner();
+        owner.setFullName("Juan Perez");
+        owner.setPhone("654456654");
+        owner.setEmail("juan@gmail.com");
+        Owner owner1 = new Owner();
+        owner1.setFullName("Jhon Wick");
+        owner1.setPhone("989879877");
+        owner1.setEmail("jhon@gmail.com");
+//        ownerJSON.insert(owner);
+//        ownerJSON.insert(owner1);
+
+        owner.setEmail("perez@gmail.com");
+//        ownerJSON.updateById(1,owner);
+
+//        ownerJSON.deleteById(1);
+//        ownerJSON.findAll().forEach(System.out::println);
+//        System.out.println(ownerJSON.findById(2));
+
+        ProductJSON productJSON = new ProductJSON(properties.getProperty("json.product"));
+
+        Product product = new Product();
+        product.setName("Meat");
+        product.setPrice(5);
+        product.setUnitMeasurement(UnitMeasurement.oz.unit);
+        Product product1 = new Product();
+        product1.setName("Eggs");
+        product1.setPrice(10);
+        product1.setUnitMeasurement(UnitMeasurement.pc.unit);
+
+//        productJSON.insert(product);
+//        productJSON.insert(product1);
+
+        product.setName("Meat Premium");
+//        productJSON.updateById(3,product);
+
+//        productJSON.findAll().forEach(System.out::println);
+
+//        System.out.println(productJSON.findById(1));
+
+//        System.out.println(productJSON.deleteById(1));
 
 
+        StoreJSON storeJSON = new StoreJSON(properties.getProperty("json.store"));
+        Store store = new Store();
+        store.setAddress("Street 4");
+        store.setName("OXXO");
 
+        Store store1 = new Store();
+        store1.setAddress("Street 5");
+        store1.setName("7ELEVEN");
 
+//        storeJSON.insert(store);
+//        storeJSON.insert(store1);
 
+        store1.setName("extra");
+//        storeJSON.updateById(3,store1);
 
+//        storeJSON.deleteById(1);
 
+//            storeJSON.findAll().forEach(System.out::println);
+//        System.out.println(storeJSON.findById(3));
 
+        FarmsSupplyProductBoughtJSON farmPurchasesJSON = new FarmsSupplyProductBoughtJSON(properties.getProperty("json.farmSupplyProductBought"));
 
+        FarmSupplyProductBought f = new FarmSupplyProductBought();
+        f.setFarm_id(1);
+        f.setProduct_id(1);
+        f.setPurchaseDate(new Date(System.currentTimeMillis()));
+        f.setAmount(10);
+        f.setTotal(100d);
+        FarmSupplyProductBought f1 = new FarmSupplyProductBought();
+        f1.setFarm_id(1);
+        f1.setProduct_id(2);
+        f1.setPurchaseDate(new Date(System.currentTimeMillis()));
+        f1.setAmount(5);
+        f1.setTotal(50d);
 
+//        farmPurchasesJSON.insert(f);
+//        farmPurchasesJSON.insert(f1);
 
+        f.setProduct_id(3);
+        f.setTotal(200d);
+        f.setProduct_id(2);
+//        farmPurchasesJSON.updateById(3,f);
 
+//        farmPurchasesJSON.findAll().forEach(System.out::println);
+//        farmPurchasesJSON.deleteById(1);
+//        System.out.println(farmPurchasesJSON.findById(1));
+    }
 
+//    @JsonRootName(value = "typeValue")
+    public enum TypeEnumWithValue {
+        TYPE1(1,"Type A"), TYPE2(2, "Type 2");
 
+        private Integer id;
+        private String name;
 
+        // standard constructors
+        TypeEnumWithValue(int id,String name){
+            this.id = id;
+            this.name = name;
+        }
+        @JsonValue
+        public String getName() {
+            return name;
+        }
+    }
 
+    public static class Employee {
 
+        private int id;
+        private String name;
+        private int age;
+        private BigDecimal salary;
+        private String designation;
+        private Address address;
+        private long[] phoneNumbers;
+        private Map<String, String> personalInformation;
 
+        /*Getter and Setter Methods*/
+        public int getId() {
+            return id;
+        }
 
+        public void setId(int id) {
+            this.id = id;
+        }
 
+        public String getName() {
+            return name;
+        }
 
+        public void setName(String name) {
+            this.name = name;
+        }
 
+        public int getAge() {
+            return age;
+        }
+
+        public void setAge(int age) {
+            this.age = age;
+        }
+
+        public BigDecimal getSalary() {
+            return salary;
+        }
+
+        public void setSalary(BigDecimal salary) {
+            this.salary = salary;
+        }
+
+        public String getDesignation() {
+            return designation;
+        }
+
+        public void setDesignation(String designation) {
+            this.designation = designation;
+        }
+
+        public Address getAddress() {
+            return address;
+        }
+
+        public void setAddress(Address address) {
+            this.address = address;
+        }
+
+        public long[] getPhoneNumbers() {
+            return phoneNumbers;
+        }
+
+        public void setPhoneNumbers(long[] phoneNumbers) {
+            this.phoneNumbers = phoneNumbers;
+        }
+
+        public Map<String, String> getPersonalInformation() {
+            return personalInformation;
+        }
+
+        public void setPersonalInformation(Map<String, String> personalInformation) {
+            this.personalInformation = personalInformation;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("\n----- Employee Information-----\n");
+            sb.append("ID: " + getId() + "\n");
+            sb.append("Name: " + getName() + "\n");
+            sb.append("Age: " + getAge() + "\n");
+            sb.append("Salary: $" + getSalary() + "\n");
+            sb.append("Designation: " + getDesignation() + "\n");
+            sb.append("Phone Numbers: " + Arrays.toString(getPhoneNumbers()) + "\n");
+            sb.append("Address: " + getAddress() + "\n");
+            sb.append("Personal Information:" + getPersonalInformation() + "\n");
+            sb.append("*****************************");
+            return sb.toString();
+        }
+    }
+
+    public static class Address {
+        private String street;
+        private String city;
+        private int zipCode;
+
+        public String getStreet() {
+            return street;
+        }
+        public void setStreet(String street) {
+            this.street = street;
+        }
+        public String getCity() {
+            return city;
+        }
+        public void setCity(String city) {
+            this.city = city;
+        }
+        public int getZipCode() {
+            return zipCode;
+        }
+        public void setZipcode(int zipcode) {
+            this.zipCode = zipcode;
+        }
+
+        @Override
+        public String toString(){
+            return getStreet() + ", "+getCity()+", "+getZipCode();
+        }
+    }
+
+    @JsonIncludeProperties({ "id" })
+    public static class BeanWithInclude {
+        public int id;
+        public String name;
+
+        public BeanWithInclude(int id, String name){
+            this.id = id;
+            this.name = name;
+        }
+    }
+
+//    @JsonPropertyOrder({"name","id"})
+//    @JsonPropertyOrder(alphabetic = true)
+//    @JsonRootName(value = "user")
+//    @JsonIgnoreProperties({"id"}) //Ignore properties in class level // To ignore any unknown properties in JSON input without exception, we can set ignoreUnknown=true of @JsonIgnoreProperties annotation.
+//    @JsonInclude(JsonInclude.Include.NON_NULL) // Exclude properties with empty/null/default values
+//    @JsonIncludeProperties({ "name" }) //serializes and deserializes regard the properties, properties need to be public
+//    @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY) //serializes and deserializes regard the properties, you assign which type of properties
+    public static class ExtendableBean{
+
+//        @JsonIgnore
+        private int id;
+        @JsonProperty("full_name")
+    private String name;
+        @JsonSerialize(using = CustomDateSerializer.class)
+        @JsonDeserialize(using = CustomDateDeserializer.class)
+        private Date date;
+//        @JsonRawValue
+        private Map<String,String> properties;
+
+        public ExtendableBean(){}
+
+        public ExtendableBean(int id,String name,Date date){
+            this.name = name;
+            this.id = id;
+            this.date = date;
+            this.properties = new HashMap<>();
+        }
+
+//        @JsonGetter("full_name")
+//        @JsonProperty("full_name")
+        public String getName() {
+            return name;
+        }
+//        @JsonSetter("full_name")
+//    @JsonProperty("full_name")
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getId() {
+            return id;
+        }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+//            @JsonAnyGetter
+//        public Map<String, String> getProperties() {
+//            return properties;
+//        }
+
+        public void add(String key,String value){
+            this.properties.put(key,value);
+        }
+
+    @Override
+    public String toString() {
+        return "ExtendableBean{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", date=" + date +
+                ", properties=" + properties +
+                '}';
+    }
+}
+
+    public static class CustomDateSerializer extends StdSerializer<Date> {
+
+        private static SimpleDateFormat formatter
+                = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+
+        public CustomDateSerializer() {
+            this(null);
+        }
+
+        public CustomDateSerializer(Class<Date> t) {
+            super(t);
+        }
+
+        @Override
+        public void serialize(
+                Date value, JsonGenerator gen, SerializerProvider arg2)
+                throws IOException, JsonProcessingException {
+            gen.writeString(formatter.format(value));
+        }
+    }
+
+    public static class CustomDateDeserializer
+            extends StdDeserializer<Date> {
+
+        private static SimpleDateFormat formatter
+                = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+
+        public CustomDateDeserializer() {
+            this(null);
+        }
+
+        public CustomDateDeserializer(Class<?> vc) {
+            super(vc);
+        }
+
+        @Override
+        public Date deserialize(
+                JsonParser jsonparser, DeserializationContext context)
+                throws IOException {
+
+            String date = jsonparser.getText();
+            try {
+                java.util.Date utilDate = formatter.parse(date);
+                return new Date(utilDate.getTime());
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 }

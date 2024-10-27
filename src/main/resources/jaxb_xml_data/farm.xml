@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<farms>
+    <farms id="2">
+        <name>JoyFarm</name>
+        <address>Town 1</address>
+        <ownerId>1</ownerId>
+    </farms>
+</farms>

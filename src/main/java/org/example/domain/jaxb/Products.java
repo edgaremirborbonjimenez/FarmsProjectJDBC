@@ -9,7 +9,9 @@ import org.example.domain.Product;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Products {
     Product[] products;
-    public Products(){}
+    public Products(){
+        this.products = new Product[0];
+    }
 
     public Product[] getProducts() {
         return products;

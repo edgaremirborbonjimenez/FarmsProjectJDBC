@@ -25,7 +25,6 @@ public class GenericMarshaller <T> implements IMarsheller<T> {
 
     @Override
     public void marshall(T data) throws JAXBException, IOException {
-        File file = new File(uriDataSource);
         JAXBContext context = JAXBContext.newInstance(clazz);
         Marshaller mar = context.createMarshaller();
         mar.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,Boolean.TRUE);
@@ -35,7 +34,7 @@ public class GenericMarshaller <T> implements IMarsheller<T> {
     @Override
     public T unmarshall() throws JAXBException, IOException {
         File file = new File(uriDataSource);
-        if (!file.exists() || !(file.length() > 0)) {
+        if (!file.exists() || file.length() == 0) {
             return null;
         }
         JAXBContext context = JAXBContext.newInstance(clazz);

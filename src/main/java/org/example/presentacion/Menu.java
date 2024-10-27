@@ -2,12 +2,16 @@ package org.example.presentacion;
 
 import org.example.domain.*;
 import org.example.utils.enums.UnitMeasurement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
 
 
 public class Menu {
+    private static final Logger log = LoggerFactory.getLogger(Menu.class);
     static Scanner scanner = new Scanner(System.in);
     static Service service = new Service();
 
@@ -23,7 +27,9 @@ public class Menu {
             System.out.println("Select Data Source:");
             System.out.println("1. Database");
             System.out.println("2. XML");
-            System.out.println("3. Exit");
+            System.out.println("3. JAXB");
+            System.out.println("4. JSON");
+            System.out.println("5. Exit");
             System.out.print("Opción: ");
 
             if(!scanner.hasNextInt()){
@@ -47,6 +53,18 @@ public class Menu {
                     exit = true;
                     break;
                 case 3:
+                    System.out.println("JAXB Selected");
+                    service.useJAXB();
+                    selectEntity = true;
+                    exit = true;
+                    break;
+                case 4:
+                    System.out.println("JSON Selected");
+                    service.useJSON();
+                    selectEntity = true;
+                    exit = true;
+                    break;
+                case 5:
                     System.out.println("Closing program...");
                     exit = true;
                     break;
@@ -60,6 +78,8 @@ public class Menu {
         }
     }
 
+
+
     public static void selectEntity(){
         boolean exit = false;
 
@@ -70,7 +90,8 @@ public class Menu {
             System.out.println("3. Animal");
             System.out.println("4. Store");
             System.out.println("5. Product");
-            System.out.println("6. Back to select data source");
+            System.out.println("6. Buy Product to Farm");
+            System.out.println("7. Back to select data source");
 
             if(!scanner.hasNextInt()){
                 System.out.println("Insert a valid option");
@@ -79,7 +100,7 @@ public class Menu {
             }
             int option = scanner.nextInt();
 
-            if(option == 6){
+            if(option == 7){
                 exit = true;
             }else{
                 selectCRUD(option);
@@ -128,6 +149,9 @@ public class Menu {
                         case 5:
                             createProduct();
                             break;
+                        case 6:
+                            purchaseProductToFarm();
+                            break;
                     }
                     break;
                 case 2:
@@ -146,6 +170,9 @@ public class Menu {
                             break;
                         case 5:
                             updateProduct();
+                            break;
+                        case 6:
+                            updateFarmPurchase();
                             break;
                     }
                     break;
@@ -166,6 +193,8 @@ public class Menu {
                         case 5:
                             deleteProductById();
                             break;
+                        case 6:
+                            deleteFarmPurchase();
                     }
                     break;
                 case 4:
@@ -184,6 +213,9 @@ public class Menu {
                             break;
                         case 5:
                             findAllProducts();
+                            break;
+                        case 6:
+                            findAllFarmPurchases();
                             break;
                     }
                     break;
@@ -204,6 +236,9 @@ public class Menu {
                         case 5:
                             findProductById();
                             break;
+                        case 6:
+                            findFarmPurchaseById();
+                            break;
                     }
                     break;
                 case 6:
@@ -216,7 +251,202 @@ public class Menu {
         }
     }
 
+    public static void purchaseProductToFarm(){
+        boolean exit = false;
+        FarmSupplyProductBought f = new FarmSupplyProductBought();
+        while (!exit){
+            System.out.println("Select farm to make a purchase");
+            List<Farm> farms = service.findAllFarms();
+            for(int i = 0; i<farms.size();i++){
+                System.out.println((i+1)+". "+farms.get(i));
+            }
+            if(!scanner.hasNextInt()){
+                scanner.next();
+                System.out.println("Please insert a  valid value");
+                continue;
+            }
+            int farmSelected = scanner.nextInt();
+            farmSelected--;
+            if(farmSelected>=farms.size() || farmSelected<0){
+                System.out.println("Please insert a  valid value");
+                continue;
+            }
 
+            System.out.println("Select Product to buy");
+            List<Product> products = service.findAllProducts();
+            for(int i = 0; i<products.size();i++){
+                System.out.println((i+1)+". "+products.get(i));
+            }
+            if(!scanner.hasNextInt()){
+                scanner.next();
+                System.out.println("Please insert a  valid value");
+                continue;
+            }
+            int productSelected = scanner.nextInt();
+            productSelected--;
+            if(productSelected>=products.size() || productSelected<0){
+                System.out.println("Please insert a  valid value");
+                continue;
+            }
+
+            System.out.println("Insert amount");
+            if(!scanner.hasNextInt()){
+                scanner.next();
+                System.out.println("Please insert a  valid value");
+                continue;
+            }
+            int amount = scanner.nextInt();
+            if(amount<=0){
+                System.out.println("Please insert an amount greater than 0");
+                continue;
+            }
+
+            Farm farm = farms.get(farmSelected);
+            Product product = products.get(productSelected);
+
+            f.setFarm_id(farm.getId());
+            f.setProduct_id(product.getId());
+            f.setPurchaseDate(new Date(System.currentTimeMillis()));
+            f.setAmount(amount);
+            f.setTotal(product.getPrice()*amount);
+            exit = true;
+        }
+        service.createFarmSupplyProductBought(f);
+
+        log.info("Supply bought successfully");
+    }
+
+    public static void updateFarmPurchase(){
+        boolean exit = false;
+        FarmSupplyProductBought update = new FarmSupplyProductBought();
+        while (!exit){
+            System.out.println("Select purchase to Update");
+            List<FarmSupplyProductBought> f = service.findAllFarmSupplyProductBought();
+            for(int i = 0; i<f.size();i++){
+                System.out.println((i+1)+". "+f.get(i));
+            }
+            if(!scanner.hasNextInt()){
+                scanner.next();
+                System.out.println("Please insert a  valid value");
+                continue;
+            }
+            int pruchaseSelected = scanner.nextInt();
+            pruchaseSelected--;
+            if(pruchaseSelected>=f.size() || pruchaseSelected<0){
+                System.out.println("Please insert a  valid value");
+                continue;
+            }
+
+            System.out.println("Select farm for the update");
+            List<Farm> farms = service.findAllFarms();
+            for(int i = 0; i<farms.size();i++){
+                System.out.println((i+1)+". "+farms.get(i));
+            }
+            if(!scanner.hasNextInt()){
+                scanner.next();
+                System.out.println("Please insert a  valid value");
+                continue;
+            }
+            int farmSelected = scanner.nextInt();
+            farmSelected--;
+            if(farmSelected>=farms.size() || farmSelected<0){
+                System.out.println("Please insert a  valid value");
+                continue;
+            }
+
+            System.out.println("Select Product for the update");
+            List<Product> products = service.findAllProducts();
+            for(int i = 0; i<products.size();i++){
+                System.out.println((i+1)+". "+products.get(i));
+            }
+            if(!scanner.hasNextInt()){
+                scanner.next();
+                System.out.println("Please insert a  valid value");
+                continue;
+            }
+            int productSelected = scanner.nextInt();
+            productSelected--;
+            if(productSelected>=products.size() || productSelected<0){
+                System.out.println("Please insert a  valid value");
+                continue;
+            }
+
+            System.out.println("Insert amount to update");
+            if(!scanner.hasNextInt()){
+                scanner.next();
+                System.out.println("Please insert a  valid value");
+                continue;
+            }
+            int amount = scanner.nextInt();
+            if(amount<=0){
+                System.out.println("Please insert an amount greater than 0");
+                continue;
+            }
+
+            Farm farm = farms.get(farmSelected);
+            Product product = products.get(productSelected);
+
+            update.setId(f.get(pruchaseSelected).getId());
+            update.setFarm_id(farm.getId());
+            update.setProduct_id(product.getId());
+            update.setPurchaseDate(new Date(System.currentTimeMillis()));
+            update.setAmount(amount);
+            update.setTotal(product.getPrice()*amount);
+            exit = true;
+        }
+        service.updateFarmSupplyProductBoughtById(update.getId(),update);
+
+        log.info("Purchase updated successfully");
+    }
+
+    public static void deleteFarmPurchase(){
+        boolean exit = false;
+        FarmSupplyProductBought delete = null;
+        while (!exit){
+            System.out.println("Select purchase to Update");
+            List<FarmSupplyProductBought> f = service.findAllFarmSupplyProductBought();
+            for(int i = 0; i<f.size();i++){
+                System.out.println((i+1)+". "+f.get(i));
+            }
+            if(!scanner.hasNextInt()){
+                scanner.next();
+                System.out.println("Please insert a  valid value");
+                continue;
+            }
+            int pruchaseSelected = scanner.nextInt();
+            pruchaseSelected--;
+            if(pruchaseSelected>=f.size() || pruchaseSelected<0){
+                System.out.println("Please insert a  valid value");
+                continue;
+            }
+            delete = f.get(pruchaseSelected);
+            exit = true;
+        }
+        service.deleteFarmSupplyProductBoughtById(delete.getId());
+        log.info("Purchase deleted successfully");
+    }
+
+    public static void findAllFarmPurchases(){
+        List<FarmSupplyProductBought> f = service.findAllFarmSupplyProductBought();
+        for(int i =0; i<f.size();i++){
+            System.out.println((i+1)+". "+f.get(i));
+        }
+    }
+
+    public static void findFarmPurchaseById(){
+        boolean exit = false;
+        int option = -1;
+
+        while (!exit){
+            System.out.println("Insert an id");
+            if(!scanner.hasNextInt()){
+                System.out.println("Please insert a valid value");
+            }
+            option = scanner.nextInt();
+            exit = true;
+        }
+        System.out.println(service.findFarmSupplyProductBoughtById(option));
+    }
 
     public static void createOwner(){
         boolean exit = false;
