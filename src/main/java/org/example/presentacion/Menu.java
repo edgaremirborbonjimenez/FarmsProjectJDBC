@@ -29,7 +29,8 @@ public class Menu {
             System.out.println("2. XML");
             System.out.println("3. JAXB");
             System.out.println("4. JSON");
-            System.out.println("5. Exit");
+            System.out.println("5. MyBatis");
+            System.out.println("6. Exit");
             System.out.print("Opción: ");
 
             if(!scanner.hasNextInt()){
@@ -65,9 +66,14 @@ public class Menu {
                     exit = true;
                     break;
                 case 5:
-                    System.out.println("Closing program...");
+                    System.out.println("MyBatis Selected");
+                    service.useMyBatis();
+                    selectEntity = true;
                     exit = true;
-                    break;
+                case 6:
+                System.out.println("Closing program...");
+                exit = true;
+                break;
                 default:
                     System.out.println("Select a valid option");
             }

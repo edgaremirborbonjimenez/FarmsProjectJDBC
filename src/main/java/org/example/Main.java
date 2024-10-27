@@ -11,11 +11,17 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.daos.jaxb.FarmsSupplyProductsBoughtJAXB;
+import org.example.daos.mybatis.*;
+import org.example.domain.*;
+import org.example.interfaces.IDAO;
+import org.example.utils.enums.UnitMeasurement;
+import org.example.utils.myBatis.mappers.AnimalMapper;
+import java.sql.Date;
 import org.example.daos.json.*;
 import org.example.domain.*;
 import org.example.presentacion.Service;
 import org.example.utils.enums.UnitMeasurement;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -33,7 +39,81 @@ public class Main {
     private static final Logger logger = LogManager.getLogger();
 
 
-    public static void main(String[] args) throws Exception, DatabindException {
+    public static void main(String[] args) throws Exception {
+        IDAO< Animal> animalIDAO = new AnimalMyBatis();
+//        System.out.println(animalIDAO.findById(1));
+
+        Animal animal = new Animal();
+        animal.setName("Goat");
+//        System.out.println(animalIDAO.insert(animal));
+        animal.setName("Cabra");
+//        System.out.println(animalIDAO.updateById(20,animal));
+//        System.out.println(animalIDAO.deleteById(12));
+//        animalIDAO.findAll().forEach(System.out::println);
+//        System.out.println(animalIDAO.findById(9));
+
+        IDAO<Owner> ownerIDAO = new OwnerMyBatis();
+
+        Owner owner = new Owner();
+        owner.setFullName("Marco");
+        owner.setPhone("654654654");
+        owner.setEmail("marco@gmail.com");
+//        System.out.println(ownerIDAO.insert(owner));
+//        System.out.println();
+//        System.out.println();
+//        System.out.println(ownerIDAO.updateById(13,owner));
+//        System.out.println(ownerIDAO.findById(1));
+//        System.out.println(ownerIDAO.deleteById(13));
+//        ownerIDAO.findAll().forEach(System.out::println);
+
+        IDAO<Farm> farmIDAO = new FarmMyBatis();
+        Farm farm = new Farm();
+        farm.setName("Granjita");
+        farm.setAddress("Rancho");
+        farm.setOwner_id(1);
+//        System.out.println(farmIDAO.insert(farm));
+        farm.setAddress("Villa");
+//        System.out.println(farmIDAO.updateById(12,farm));
+//        System.out.println(farmIDAO.deleteById(12));
+//        System.out.println(farmIDAO.findById(8));
+//        farmIDAO.findAll().forEach(System.out::println);
+
+        IDAO<Product> productIDAO = new ProductMyBatis();
+        Product product = new Product();
+        product.setName("Honey");
+        product.setUnitMeasurement(UnitMeasurement.L.unit);
+        product.setPrice(5);
+//        System.out.println(productIDAO.insert(product));
+//        System.out.println(productIDAO.updateById(6,product));
+//        System.out.println(productIDAO.findById(6));
+//        productIDAO.findAll().forEach(System.out::println);
+
+        IDAO<Store> storeIDAO = new StoreMyBatis();
+        Store store = new Store();
+        store.setName("Tiendita");
+        store.setAddress("Street 54");
+//        System.out.println(storeIDAO.insert(store));
+        store.setName("Tienditita");
+//        System.out.println(storeIDAO.updateById(8,store));
+//        System.out.println(storeIDAO.deleteById(8));
+//        System.out.println(storeIDAO.findById(5));
+//        storeIDAO.findAll().forEach(System.out::println);
+
+        IDAO<FarmSupplyProductBought> farmSupplyDAO = new FarmSupplyProductBoughtMyBatis();
+        FarmSupplyProductBought f = new FarmSupplyProductBought();
+        f.setPurchaseDate(new Date(System.currentTimeMillis()));
+        f.setTotal(50d);
+        f.setAmount(10);
+        f.setProduct_id(1);
+        f.setFarm_id(1);
+//        System.out.println(farmSupplyDAO.insert(f));
+
+        f.setAmount(5);
+        f.setTotal(25d);
+//        farmSupplyDAO.updateById(7,f);
+//        farmSupplyDAO.deleteById(7);
+//        System.out.println(farmSupplyDAO.findById(4));
+//        farmSupplyDAO.findAll().forEach(System.out::println);
 
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.configure(SerializationFeature.INDENT_OUTPUT,true);
@@ -89,10 +169,10 @@ public class Main {
         properties.load(Main.class.getClassLoader().getResourceAsStream("env.properties"));
         AnimalJSON animalJSON = new AnimalJSON(properties.getProperty("json.animal"));
 
-        Animal animal = new Animal();
-        animal.setName("Goat");
-        Animal animal2 = new Animal();
-        animal2.setName("Vaca");
+//        Animal animal = new Animal();
+//        animal.setName("Goat");
+//        Animal animal2 = new Animal();
+//        animal2.setName("Vaca");
 //        animalJSON.insert(animal);
 //        animalJSON.insert(animal2);
 
@@ -102,37 +182,37 @@ public class Main {
 //        System.out.println(animalJSON.findById(1));
 
         FarmJSON farmJSON = new FarmJSON(properties.getProperty("json.farm"));
-        Farm farm = new Farm();
-        farm.setName("JoyFarm");
-        farm.setOwner_id(1);
-        farm.setAddress("Town 1");
-        Farm farm2 = new Farm();
-        farm2.setName("FARM");
-        farm2.setOwner_id(1);
-        farm2.setAddress("Town 2");
+//        Farm farm = new Farm();
+//        farm.setName("JoyFarm");
+//        farm.setOwner_id(1);
+//        farm.setAddress("Town 1");
+//        Farm farm2 = new Farm();
+//        farm2.setName("FARM");
+//        farm2.setOwner_id(1);
+//        farm2.setAddress("Town 2");
 //        farmJSON.insert(farm);
 //        farmJSON.insert(farm2);
-        farm.setName("extra");
-        farm.setOwner_id(1);
-        farm.setAddress("Address 1");
+//        farm.setName("extra");
+//        farm.setOwner_id(1);
+//        farm.setAddress("Address 1");
 //        farmJSON.updateById(1,farm);
 //        farmJSON.deleteById(1);
 //        farmJSON.findAll().forEach(System.out::println);
 //        System.out.println(farmJSON.findById(2));
 
         OwnerJSON ownerJSON = new OwnerJSON(properties.getProperty("json.owner"));
-        Owner owner = new Owner();
-        owner.setFullName("Juan Perez");
-        owner.setPhone("654456654");
-        owner.setEmail("juan@gmail.com");
-        Owner owner1 = new Owner();
-        owner1.setFullName("Jhon Wick");
-        owner1.setPhone("989879877");
-        owner1.setEmail("jhon@gmail.com");
+//        Owner owner = new Owner();
+//        owner.setFullName("Juan Perez");
+//        owner.setPhone("654456654");
+//        owner.setEmail("juan@gmail.com");
+//        Owner owner1 = new Owner();
+//        owner1.setFullName("Jhon Wick");
+//        owner1.setPhone("989879877");
+//        owner1.setEmail("jhon@gmail.com");
 //        ownerJSON.insert(owner);
 //        ownerJSON.insert(owner1);
 
-        owner.setEmail("perez@gmail.com");
+//        owner.setEmail("perez@gmail.com");
 //        ownerJSON.updateById(1,owner);
 
 //        ownerJSON.deleteById(1);
@@ -141,19 +221,19 @@ public class Main {
 
         ProductJSON productJSON = new ProductJSON(properties.getProperty("json.product"));
 
-        Product product = new Product();
-        product.setName("Meat");
-        product.setPrice(5);
-        product.setUnitMeasurement(UnitMeasurement.oz.unit);
-        Product product1 = new Product();
-        product1.setName("Eggs");
-        product1.setPrice(10);
-        product1.setUnitMeasurement(UnitMeasurement.pc.unit);
+//        Product product = new Product();
+//        product.setName("Meat");
+//        product.setPrice(5);
+//        product.setUnitMeasurement(UnitMeasurement.oz.unit);
+//        Product product1 = new Product();
+//        product1.setName("Eggs");
+//        product1.setPrice(10);
+//        product1.setUnitMeasurement(UnitMeasurement.pc.unit);
 
 //        productJSON.insert(product);
 //        productJSON.insert(product1);
 
-        product.setName("Meat Premium");
+//        product.setName("Meat Premium");
 //        productJSON.updateById(3,product);
 
 //        productJSON.findAll().forEach(System.out::println);
@@ -164,18 +244,18 @@ public class Main {
 
 
         StoreJSON storeJSON = new StoreJSON(properties.getProperty("json.store"));
-        Store store = new Store();
-        store.setAddress("Street 4");
-        store.setName("OXXO");
-
-        Store store1 = new Store();
-        store1.setAddress("Street 5");
-        store1.setName("7ELEVEN");
+//        Store store = new Store();
+//        store.setAddress("Street 4");
+//        store.setName("OXXO");
+//
+//        Store store1 = new Store();
+//        store1.setAddress("Street 5");
+//        store1.setName("7ELEVEN");
 
 //        storeJSON.insert(store);
 //        storeJSON.insert(store1);
 
-        store1.setName("extra");
+//        store1.setName("extra");
 //        storeJSON.updateById(3,store1);
 
 //        storeJSON.deleteById(1);
@@ -185,25 +265,25 @@ public class Main {
 
         FarmsSupplyProductBoughtJSON farmPurchasesJSON = new FarmsSupplyProductBoughtJSON(properties.getProperty("json.farmSupplyProductBought"));
 
-        FarmSupplyProductBought f = new FarmSupplyProductBought();
-        f.setFarm_id(1);
-        f.setProduct_id(1);
-        f.setPurchaseDate(new Date(System.currentTimeMillis()));
-        f.setAmount(10);
-        f.setTotal(100d);
-        FarmSupplyProductBought f1 = new FarmSupplyProductBought();
-        f1.setFarm_id(1);
-        f1.setProduct_id(2);
-        f1.setPurchaseDate(new Date(System.currentTimeMillis()));
-        f1.setAmount(5);
-        f1.setTotal(50d);
+//        FarmSupplyProductBought f = new FarmSupplyProductBought();
+//        f.setFarm_id(1);
+//        f.setProduct_id(1);
+//        f.setPurchaseDate(new Date(System.currentTimeMillis()));
+//        f.setAmount(10);
+//        f.setTotal(100d);
+//        FarmSupplyProductBought f1 = new FarmSupplyProductBought();
+//        f1.setFarm_id(1);
+//        f1.setProduct_id(2);
+//        f1.setPurchaseDate(new Date(System.currentTimeMillis()));
+//        f1.setAmount(5);
+//        f1.setTotal(50d);
 
 //        farmPurchasesJSON.insert(f);
 //        farmPurchasesJSON.insert(f1);
 
-        f.setProduct_id(3);
-        f.setTotal(200d);
-        f.setProduct_id(2);
+//        f.setProduct_id(3);
+//        f.setTotal(200d);
+//        f.setProduct_id(2);
 //        farmPurchasesJSON.updateById(3,f);
 
 //        farmPurchasesJSON.findAll().forEach(System.out::println);

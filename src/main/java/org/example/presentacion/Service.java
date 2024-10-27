@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.example.Main;
 import org.example.daos.jaxb.*;
 import org.example.daos.jdbc.*;
+import org.example.daos.mybatis.*;
 import org.example.daos.json.*;
 import org.example.daos.xml.*;
 import org.example.domain.*;
@@ -94,6 +95,15 @@ public class Service {
 
     }
 
+    public void useMyBatis(){
+        animalService = new AnimalService(new AnimalMyBatis());
+        ownerService = new OwnerService(new OwnerMyBatis());
+        farmService = new FarmService(new FarmMyBatis());
+        productService = new ProductService(new ProductMyBatis());
+        storeService = new StoreService(new StoreMyBatis());
+        farmSupplyProductBoughtService = new FarmSupplyProductBoughtService(new FarmSupplyProductBoughtMyBatis());
+        logger.info("Data Source with MyBaris assigned");
+    }
 
     public void useJAXB(){
         try{
