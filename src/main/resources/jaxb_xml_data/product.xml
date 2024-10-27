@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<products>
+    <products id="1">
+        <name>Leche</name>
+        <price>5.0</price>
+        <unitMeasurement>L</unitMeasurement>
+    </products>
+    <products id="3">
+        <name>Agua</name>
+        <price>5.0</price>
+        <unitMeasurement>L</unitMeasurement>
+    </products>
+</products>

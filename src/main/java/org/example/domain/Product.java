@@ -1,5 +1,7 @@
 package org.example.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.xml.bind.annotation.*;
 import org.example.utils.enums.UnitMeasurement;
 
@@ -8,11 +10,16 @@ import java.util.List;
 @XmlRootElement(name="product")
 @XmlType(propOrder = {"id","name","price","unitMeasurement"})
 @XmlAccessorType(XmlAccessType.FIELD)
+@JsonPropertyOrder({"id","name","price","unitMeasurement"})
 public class Product {
     @XmlAttribute
+    @JsonProperty("id")
     int id;
+    @JsonProperty("name")
     String name;
+    @JsonProperty("price")
     double price;
+    @JsonProperty("unitMeasurement")
     String unitMeasurement;
 
     public Product(){}

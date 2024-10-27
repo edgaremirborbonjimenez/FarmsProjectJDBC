@@ -9,7 +9,9 @@ import org.example.domain.Owner;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Owners {
     Owner[] owners;
-    public Owners(){}
+    public Owners(){
+        this.owners = new Owner[0];
+    }
 
     public Owner[] getOwners() {
         return owners;

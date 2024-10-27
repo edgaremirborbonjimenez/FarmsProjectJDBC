@@ -9,7 +9,9 @@ import org.example.domain.Store;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Stores {
     Store[] stores;
-    public Stores(){}
+    public Stores(){
+        this.stores = new Store[0];
+    }
 
     public Store[] getStores() {
         return stores;

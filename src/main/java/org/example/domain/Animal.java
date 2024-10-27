@@ -1,5 +1,7 @@
 package org.example.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.xml.bind.annotation.*;
 
 // Note : Add element o attribute annotation on getter y setter
@@ -14,9 +16,12 @@ import jakarta.xml.bind.annotation.*;
 @XmlRootElement(name="animal")
 @XmlType(propOrder = {"id","name"})
 @XmlAccessorType(XmlAccessType.FIELD)
+@JsonPropertyOrder({"id","name"})
 public class Animal {
     @XmlAttribute
+    @JsonProperty("id")
     int id;
+    @JsonProperty("name")
     String name;
     public Animal(){}
 
