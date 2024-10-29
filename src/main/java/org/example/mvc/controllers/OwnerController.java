@@ -10,8 +10,18 @@ public class OwnerController implements GenericController<Owner> {
     GenericView<Owner> ownerView;
     GenericModel<Owner> ownerModel;
 
+    public OwnerController(){}
+
     public OwnerController(GenericView<Owner> ownerView,GenericModel<Owner> ownerModel){
         this.ownerModel = ownerModel;
+        this.ownerView = ownerView;
+    }
+
+    public void setOwnerModel(GenericModel<Owner> ownerModel) {
+        this.ownerModel = ownerModel;
+    }
+
+    public void setOwnerView(GenericView<Owner> ownerView) {
         this.ownerView = ownerView;
     }
 

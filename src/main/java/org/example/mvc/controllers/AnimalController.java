@@ -10,11 +10,20 @@ public class AnimalController implements GenericController<Animal> {
     GenericModel<Animal> animalModel;
     GenericView<Animal> animalView;
 
+    public AnimalController(){}
+
     public AnimalController(GenericView<Animal> animalView,GenericModel<Animal> animalModel){
         this.animalModel = animalModel;
         this.animalView = animalView;
     }
 
+    public void setAnimalModel(GenericModel<Animal> animalModel) {
+        this.animalModel = animalModel;
+    }
+
+    public void setAnimalView(GenericView<Animal> animalView) {
+        this.animalView = animalView;
+    }
 
     @Override
     public void create(Animal data) {

@@ -68,7 +68,7 @@ public class StoreModel implements GenericModel<Store>, GenericViewModel<Store>,
     @Override
     public Store findById(int id) {
         try{
-            this.storeDAO.findById(id);
+            return this.storeDAO.findById(id);
         }catch(Exception e){
             logger.error(e.getMessage());
         }

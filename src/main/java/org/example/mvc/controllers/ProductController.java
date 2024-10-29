@@ -10,8 +10,18 @@ public class ProductController implements GenericController<Product> {
     GenericView<Product> productView;
     GenericModel<Product> productModel;
 
+    public ProductController(){}
+
     public ProductController(GenericView<Product> productView, GenericModel<Product> productModel){
         this.productModel = productModel;
+        this.productView = productView;
+    }
+
+    public void setProductModel(GenericModel<Product> productModel) {
+        this.productModel = productModel;
+    }
+
+    public void setProductView(GenericView<Product> productView) {
         this.productView = productView;
     }
 

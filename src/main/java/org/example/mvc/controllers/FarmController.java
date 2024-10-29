@@ -10,8 +10,18 @@ public class FarmController implements GenericController<Farm> {
     GenericModel<Farm> farmModel;
     GenericView<Farm> farmView;
 
+    public FarmController(){}
+
     public FarmController(GenericView<Farm> farmView, GenericModel<Farm> farmModel){
         this.farmModel = farmModel;
+        this.farmView = farmView;
+    }
+
+    public void setFarmModel(GenericModel<Farm> farmModel) {
+        this.farmModel = farmModel;
+    }
+
+    public void setFarmView(GenericView<Farm> farmView) {
         this.farmView = farmView;
     }
 
