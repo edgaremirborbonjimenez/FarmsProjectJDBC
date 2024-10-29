@@ -5,6 +5,7 @@ import org.example.domain.Owner;
 import org.example.mvc.interfaces.GenericController;
 import org.example.mvc.interfaces.GenericModel;
 import org.example.mvc.interfaces.GenericView;
+import org.example.mvc.interfaces.GenericViewModel;
 
 import java.util.List;
 import java.util.Scanner;
@@ -12,7 +13,7 @@ import java.util.Scanner;
 public class OwnerView implements GenericView<Owner> {
 
     GenericController<Owner> ownerController;
-    GenericModel<Owner> ownerModel;
+    GenericViewModel<Owner> ownerModel;
     Scanner scanner;
 
     public OwnerView(GenericController<Owner> ownerController,GenericModel<Owner> ownerModel){
@@ -168,7 +169,7 @@ public class OwnerView implements GenericView<Owner> {
 
             exit = true;
         }
-        this.ownerModel.create(newOwner);
+        this.ownerController.create(newOwner);
     }
 
     public void updateOwner(){

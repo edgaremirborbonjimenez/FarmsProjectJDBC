@@ -5,6 +5,7 @@ import org.example.domain.Product;
 import org.example.mvc.interfaces.GenericController;
 import org.example.mvc.interfaces.GenericModel;
 import org.example.mvc.interfaces.GenericView;
+import org.example.mvc.interfaces.GenericViewModel;
 import org.example.utils.enums.UnitMeasurement;
 
 import java.util.List;
@@ -13,10 +14,10 @@ import java.util.Scanner;
 public class ProductView implements GenericView<Product> {
 
     GenericController<Product> productController;
-    GenericModel<Product> productModel;
+    GenericViewModel<Product> productModel;
     Scanner scanner;
 
-    public ProductView(GenericController<Product> productController,GenericModel<Product> productModel){
+    public ProductView(GenericController<Product> productController, GenericViewModel<Product> productModel){
         this.productController = productController;
         this.productModel = productModel;
         this.scanner = new Scanner(System.in);
@@ -178,7 +179,7 @@ public class ProductView implements GenericView<Product> {
             newProduct.setUnitMeasurement(units[unitSelected-1].unit);
             exit = true;
         }
-        this.productModel.create(newProduct);
+        this.productController.create(newProduct);
     }
 
     public void updateProduct(){
@@ -246,7 +247,7 @@ public class ProductView implements GenericView<Product> {
             productUpdated.setName(name);
             productUpdated.setPrice(price);
             productUpdated.setUnitMeasurement(units[unitSelected-1].unit);
-            this.productModel.update(productsList.get(option-1).getId(),productUpdated);
+            this.productController.update(productsList.get(option-1).getId(),productUpdated);
             exit = true;
             System.out.println();
         }
@@ -277,7 +278,7 @@ public class ProductView implements GenericView<Product> {
                 System.out.println("Select a valid option");
                 continue;
             }
-            this.productModel.delete(productsList.get(option-1).getId());
+            this.productController.delete(productsList.get(option-1).getId());
             exit = true;
             System.out.println();
         }
