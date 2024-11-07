@@ -15,9 +15,9 @@ public class Menu {
     static Scanner scanner = new Scanner(System.in);
     static Service service = new Service();
 
-    public static void main(String[] args) {
-        displayMenu();
-    }
+//    public static void main(String[] args) {
+//        displayMenu();
+//    }
 
     public static void displayMenu(){
         boolean exit = false;
@@ -801,7 +801,6 @@ public class Menu {
         while (!exit){
             System.out.println("Insert animal name");
             scanner.nextLine();
-//            scanner.hasNextLine();
             String animalName = scanner.nextLine();
             if(animalName.isBlank()){
                 System.out.println("Please enter a valid value");

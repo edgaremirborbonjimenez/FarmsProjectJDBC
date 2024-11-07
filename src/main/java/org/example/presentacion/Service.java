@@ -2,7 +2,6 @@ package org.example.presentacion;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.Main;
 import org.example.daos.jaxb.*;
 import org.example.daos.jdbc.*;
 import org.example.daos.mybatis.*;
